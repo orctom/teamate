@@ -1,18 +1,20 @@
 {
-	"name":"teamate",
-	"description":"team mate monitor team task' status",
-	"version":"1.0.0",
-	"private":true,
-	"scripts":{
-		"start":"node ./bin/www"
-	},
-	"dependencies":{
-		"express":"~3.4.8",
-		"static-favicon":"~1.0.0",
-		"morgan":"~1.0.0",
-		"cookie-parser":"~1.0.1",
-		"body-parser":"~1.0.0",
-		"debug":"~0.7.4",
-		"jade":"~1.3.0"
-	}
+    "name": "teamate",
+    "description": "team mate monitor team task' status",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www"
+    },
+    "dependencies": {
+        "express": "~3.4.8",
+        "static-favicon": "~1.0.0",
+        "morgan": "~1.0.0",
+        "cookie-parser": "~1.0.1",
+        "body-parser": "~1.0.0",
+        "debug": "~0.7.4",
+        "mongodb": "*",
+        "monk": "*",
+        "jade": "~1.3.0"
+    }
 }

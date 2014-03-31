@@ -1,4 +1,11 @@
 /* GET users listing. */
-exports.list = function(req, res){
-  res.send('respond with a resource');
+exports.list = function(db) {
+    return function(req, res) {
+        var collection = db.get('usercollection');
+        collection.find({}, {}, function(e, docs) {
+            res.render('users', {
+                "users": docs
+            });
+        });
+    };
 };
