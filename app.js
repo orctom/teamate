@@ -31,6 +31,13 @@ var users = require('./routes/user');
 app.get('/', routes.index);
 app.get('/users', users.list(db));
 
+
+var schedule = require('node-schedule');
+schedule.scheduleJob('* * * * 1-5', function() {
+    console.log('The answer to life, the universe, and everything!');
+});
+
+
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

@@ -13,8 +13,10 @@
         "cookie-parser": "~1.0.1",
         "body-parser": "~1.0.0",
         "debug": "~0.7.4",
-        "mongodb": "*",
-        "monk": "*",
-        "jade": "~1.3.0"
+        "mongodb": "~1.3.23",
+        "monk": "~0.8.1",
+        "jade": "~1.3.0",
+        "node-rest-client": "~0.8.3",
+        "node-schedule": "~0.1.13"
     }
 }
