@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/teamate');
+var rest = require('restler');
 
 var app = express();
 
@@ -30,6 +31,7 @@ var users = require('./routes/user');
 
 app.get('/', routes.index);
 app.get('/users', users.list(db));
+app.get('/user', users.lookup(rest));
 
 
 var schedule = require('node-schedule');
