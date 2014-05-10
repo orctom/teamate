@@ -15,7 +15,9 @@ exports.login = function(rest) {
                 console.log('Error:', result.message);
             } else {
                 var token = data.loginResult.token[0];
-
+                req.session.user_id = token;
+                req.session.token = token;
+                res.redirect('/my_secret_page');
             }
         });
     };
