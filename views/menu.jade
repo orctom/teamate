@@ -1,0 +1,22 @@
+.navbar-header
+	button(class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse")
+		span.sr-only Toggle navigation
+		span.iron-bar
+		span.iron-bar
+		span.iron-bar
+	a(class="navbar-brand" href="/") Team Mate
+
+ui.nav.navbar-top-links.navbar-right
+	li.dropdown
+		a(class="dropdown-toggle" data-toggle="dropdown" href="#")
+			i.fa.fa-gears.fa-fw
+			i.fa.fa-caret-down
+		ul.dropdown-menu.dropdown-user
+			li
+				a(href="/login")
+					i.fa.fa-sign-in
+					|Login
+			li
+				a(href="/logout")
+					i.fa.fa-sing-out
+					|Logout
