@@ -160,14 +160,14 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
   // ==============================
 
   var Button = function (element, options) {
-    this.$element  = $(element)
-    this.options   = $.extend({}, Button.DEFAULTS, options)
-    this.isLoading = false
-  }
+    this.$element  = $(element);
+    this.options   = $.extend({}, Button.DEFAULTS, options);
+    this.isLoading = false;
+  };
 
   Button.DEFAULTS = {
     loadingText: 'loading...'
-  }
+  };
 
   Button.prototype.setState = function (state) {
     var d    = 'disabled'
@@ -191,7 +191,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
         $el.removeClass(d).removeAttr(d)
       }
     }, this), 0)
-  }
+  };
 
   Button.prototype.toggle = function () {
     var changed = true
@@ -207,13 +207,13 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     }
 
     if (changed) this.$element.toggleClass('active')
-  }
+  };
 
 
   // BUTTON PLUGIN DEFINITION
   // ========================
 
-  var old = $.fn.button
+  var old = $.fn.button;
 
   $.fn.button = function (option) {
     return this.each(function () {
@@ -226,7 +226,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       if (option == 'toggle') data.toggle()
       else if (option) data.setState(option)
     })
-  }
+  };
 
   $.fn.button.Constructor = Button
 
