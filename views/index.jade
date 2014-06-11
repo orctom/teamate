@@ -7,9 +7,9 @@ block content
 
 	.row
 		.col-lg-12
-			p Hello #{title}
+			p Hello
 			if user
-				h1 user
+				h1 #{user.username} - #{user.token}
 			else
-				h1 not loged in
+				h1 not logged in
 		

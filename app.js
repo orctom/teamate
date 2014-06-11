@@ -29,9 +29,16 @@ app.configure(function() {
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
 
+    app.use(express.session({
+        secret: 'hdgfhasgfhasdhfjhj234h2uiorh'
+    }));
     app.use(passport.initialize());
     app.use(passport.session());
 
+    app.use(function(req, res, next) {
+        res.locals.user = req.user;
+        next();
+    });
     app.use(app.router);
 });
 

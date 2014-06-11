@@ -6,17 +6,23 @@
 	a(class="navbar-brand" href="/") Team Mate
 
 ui.nav.navbar-top-links.navbar-right
+	if user
+		a(href='/profile')
+			i.fa.fa-user.fa-fw 
+			| #{user.name}
 	li.dropdown
 		a(class="dropdown-toggle" data-toggle="dropdown" href="#")
 			i.fa.fa-gears.fa-fw
 			| &nbsp;
 			i.fa.fa-caret-down
 		ul.dropdown-menu.dropdown-user
-			li
-				a(href="/login")
-					i.fa.fa-sign-in
-					| &nbsp; Login
-			li
-				a(href="/logout")
-					i.fa.fa-sign-out
-					| &nbsp; Logout
+			if user
+				li
+					a(href="/logout")
+						i.fa.fa-sign-out
+						| &nbsp; Logout
+			else
+				li
+					a(href="/login")
+						i.fa.fa-sign-in
+						| &nbsp; Login

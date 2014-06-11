@@ -1,3 +1,5 @@
+var API = require('./middlewares/API');
+
 module.exports = function(app, passport) {
 
     app.get('/', function(req, res) {
@@ -13,7 +15,8 @@ module.exports = function(app, passport) {
     app.post('/login',
         passport.authenticate('local', {
             successRedirect: '/',
-            failureRedirect: '/login?failed=true'
+            failureRedirect: '/login?failed=true',
+            failureFlash: true
         })
     );
 
@@ -30,7 +33,9 @@ module.exports = function(app, passport) {
 };
 
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
+    if (req.isAuthenticated()) {
         return next();
-    res.redirect('/');
+    } else {
+        res.redirect('/login');
+    }
 }

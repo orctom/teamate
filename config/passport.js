@@ -17,8 +17,9 @@ module.exports = function(passport) {
                 API.login(username, password, function(error, user) {
                     if (error) {
                         return done(error);
+                    } else {
+                        return done(null, user);
                     }
-                    return done(null, user);
                 });
             })
         }
