@@ -1,8 +1,11 @@
-extends layout
+extends layout/layout
 
 block content
-	div.container
-		h1= title
-		hello #{title}
-		p Welcome to #{title}
+	.row
+		.col-lg-12
+			h1.page-header Dashboard
+
+	.row
+		.col-lg-12
+			p Hello #{title}
 		

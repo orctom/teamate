@@ -4,8 +4,8 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "start": "node ./bin/www",
-        "test": "nodemon ./bin/www"
+        "start": "node app.js",
+        "test": "nodemon app.js"
     },
     "dependencies": {
         "express": "~3.4.8",
@@ -20,6 +20,7 @@
         "restler": "~3.2.1",
         "node-schedule": "~0.1.13",
         "passport": "~0.2.0",
-        "passport-local": "~1.0.0"
+        "passport-local": "~1.0.0",
+        "passport-ldapauth": "~0.2.0"
     }
 }

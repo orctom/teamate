@@ -1,0 +1,24 @@
+.navbar-default.navbar-static-side
+	.sidebar-collapse
+		ul(class="nav" id="side-menu")
+			li.sidebar-search
+				.input-group.custom-search-form
+					input(type="text" class="form-control" placeholder="Search...")
+					span.input-group-btn
+						button.btn.btn-default
+							i.fa.fa-search
+			li
+				a(href="/")
+					i.fa.fa-dashboard.fa-fw
+					| &nbsp; Dashboard
+			li
+				a(href="#")
+					i.fa.fa-fw
+					| &nbsp; teams
+					span.fa.arrow
+				ul.nav.nav-second-level
+					li
+						a(href="/teams/")
+							i.fa.fa-desktop.fa-fw
+							| &nbsp; team a
+							
