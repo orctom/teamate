@@ -1,8 +1,14 @@
 var API = require('./middlewares/API');
 
 module.exports = function(app, passport) {
-
     app.get('/', function(req, res) {
+        var user = req.user;
+        API.jiras(user.username, user.password, function(error, data) {
+            console.log("--------------")
+            console.log(error);
+            console.log(data);
+            console.log("--------------")
+        });
         res.render('index');
     });
 
@@ -12,15 +18,23 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.post('/login',
+    app.post('/login', function(req, res, next) {
         passport.authenticate('local', {
             successRedirect: '/',
             failureRedirect: '/login?failed=true',
             failureFlash: true
-        })
-    );
+        })(req, res, next);
+    });
 
-    app.get('/profile', isLoggedIn, function(req, res) {
+
+    app.get('/profile', requireLogin, function(req, res) {
+        var user = req.user;
+        API.jiras(user.username, user.password, function(error, data) {
+            console.log("--------------")
+            console.log(error);
+            console.log(data);
+            console.log("--------------")
+        });
         res.render('profile', {
             user: req.user
         });
@@ -32,7 +46,7 @@ module.exports = function(app, passport) {
     });
 };
 
-function isLoggedIn(req, res, next) {
+function requireLogin(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     } else {

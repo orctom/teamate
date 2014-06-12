@@ -16,7 +16,9 @@ module.exports = function(passport) {
             process.nextTick(function() {
                 API.login(username, password, function(error, user) {
                     if (error) {
-                        return done(error);
+                        return done(null, false, {
+                            message: error
+                        });
                     } else {
                         return done(null, user);
                     }

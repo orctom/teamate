@@ -61,7 +61,7 @@ app.configure('development', function() {
 // sheduler
 var schedule = require('node-schedule');
 schedule.scheduleJob('* * * * *', function() {
-    console.log('The answer to life, the universe, and everything!');
+    console.log('The answer to life, the universe, and everything! ' + new Date());
 });
 
 

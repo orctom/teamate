@@ -1,6 +1,6 @@
-extends layout/layout
+extends layout/layout-blank
 block title 
-	title Login
+	title TeamMate Login
 block content
 	.row
 		.col-lg-12
@@ -16,8 +16,8 @@ block content
 					form(action='/login', method='POST', role='form')
 						fieldset
 							.form-group
-								input.form-control(type='text', required, name='username' placeholder='JIRA Username' autofocus)
+								input.form-control(type='text', required, name='username' value='hao.chen2' placeholder='JIRA Username' autofocus)
 							.form-group
-								input.form-control(type='password', required, name='password' placeholder='JIRA Password')
+								input.form-control(type='password', required, name='password' value='123qweasd' placeholder='JIRA Password')
 						button.btn.btn-primary.btn-lg.btn-block(type='submit') Login 
 		
