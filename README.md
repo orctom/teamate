@@ -15,6 +15,7 @@ https://officedepot.atlassian.net/rest/api/2/issue/NAECOM-839
 [query jira list]
 https://officedepot.atlassian.net/rest/api/2/search?jql=status+in+(Open,+%22In+Progress%22,+Reopened,+%22Pending+test%22,+Rejected,+%22Code+Review%22,+Review)+AND+assignee+in+(currentUser())
 https://officedepot.atlassian.net/rest/api/2/search?jql=status+in+(Open,+%22In+Progress%22,+Reopened,+%22Pending+test%22,+Rejected,+%22Code+Review%22,+Review)+AND+assignee+in+(bin.yang,+huawei.zhu)
+https://officedepot.atlassian.net/rest/api/2/search?jql=status in (Open, "In Progress", Reopened, "Pending test", Rejected, "Code Review", Review) AND assignee in (hao.chen2)
 
 [get user info]
 https://ecomsvn.officedepot.com/rest-service/users-v1/hao.chen2

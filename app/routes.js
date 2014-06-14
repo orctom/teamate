@@ -1,7 +1,7 @@
 var API = require('./middlewares/API');
 
 module.exports = function(app, passport) {
-    app.get('/', function(req, res) {
+    app.get('/', requireLogin, function(req, res) {
         var user = req.user;
         API.jiras(user.username, user.password, function(error, data) {
             console.log("--------------")

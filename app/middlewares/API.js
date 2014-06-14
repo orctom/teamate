@@ -1,12 +1,18 @@
-var rest = require('restler');
+var rest = require('./rest');
 
 exports.login = function(username, password, done) {
-    rest.get('https://ecomsvn.officedepot.com/rest-service/auth-v1/login?userName=' + username + '&password=' + password).on('complete', function(data) {
-        if (data instanceof Error) {
-            done(data);
+    var params = {
+        userName: username,
+        password: password
+    }
+    var url = "https://ecomsvn.officedepot.com/rest-service/auth-v1/login";
+    rest.get(url, params, function(error, data) {
+        console.log("data: " + JSON.stringify(data));
+        if (error) {
+            done(error);
         } else {
-            if (data.loginResult.token) {
-                var token = data.loginResult.token[0];
+            if (data.token) {
+                var token = data.token;
                 exports.profile(username, token, function(error, data) {
                     if (error) {
                         return done(error);
@@ -26,13 +32,16 @@ exports.login = function(username, password, done) {
 };
 
 exports.profile = function(username, token, done) {
-    var url = 'https://ecomsvn.officedepot.com/rest-service/users-v1/' + username + "?FEAUTH=" + token;
-    rest.get(url).on('complete', function(data) {
-        if (data instanceof Error) {
-            done(data);
+    var params = {
+        FEAUTH: token
+    };
+    var url = 'https://ecomsvn.officedepot.com/rest-service/users-v1/' + username;
+    rest.get(url, params, function(error, data) {
+        if (error) {
+            done(error);
         } else {
-            if (data.restUserProfileData.userData) {
-                var userData = data.restUserProfileData.userData[0];
+            if (data.userData) {
+                var userData = data.userData;
                 var avatar = String(userData.avatarUrl);
                 var questionMarkIndex = avatar.indexOf("?");
                 if (questionMarkIndex > 0) {
@@ -52,24 +61,19 @@ exports.profile = function(username, token, done) {
 };
 
 exports.jiras = function(username, password, done) {
-    var url = 'https://officedepot.atlassian.net/rest/api/2/search?';
-    var options = {
-        username: username,
-        password: password,
-        query: {
-            jql: "status in (Open, 'In Progress', Reopened, 'Pending test', Rejected, 'Code Review', Review) AND assignee in (hao.chen2)"
-        }
+    var params = {
+        jql: 'status in (Open, "In Progress", Reopened, "Pending test", Rejected, "Code Review", Review) AND assignee in (hao.chen2)'
     };
-    rest.json(url, options).on('complete', function(data) {
-        if (data instanceof Error) {
-            done(data);
+    var url = "https://officedepot.atlassian.net/rest/api/2/search";
+    rest.get(url, params, function(error, data) {
+        if (error) {
+            done(error);
         } else {
-            console.log("data: " + JSON.stringify(data));
             if (data.issues) {
                 var issues = [];
                 console.log("length= " + data.issues.length);
                 for (var i in data.issues) {
-                    console.log("====== start +++++++");
+                    console.log("====== start =======");
                     console.log(data.issues[i])
                     console.log("=====================");
                     var key = data.issues[i].key;
@@ -111,5 +115,12 @@ exports.jiras = function(username, password, done) {
                 done(new Error(data.error));
             }
         }
-    });
+    }, auth(username, password));
 };
+
+function auth(username, password) {
+    return {
+        username: username,
+        password: password
+    }
+}
