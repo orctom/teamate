@@ -177,6 +177,43 @@ exports.jira = function(jira, username, password, done) {
     }, auth(username, password));
 };
 
+exports.search = function(jql, username, password, done, startAt) {
+    var params = {
+        jql: jql
+    };
+    if (startAt) {
+        params.startAt = startAt;
+    }
+    var url = "https://officedepot.atlassian.net/rest/api/2/search/";
+    rest.get(url, params, function(error, data) {
+        if (error) {
+            done(error);
+        } else {
+            if (data) {
+                var issue = getJIRA(data);
+                done(null, issue);
+            } else {
+                done(new Error(data.error));
+            }
+        }
+    }, auth(username, password));
+};
+
+exports.activities = function(username, password, done) {
+    var url = "https://officedepot.atlassian.net/activity";
+    rest.get(url, null, function(error, data) {
+        if (error) {
+            done(error);
+        } else {
+            if (data) {
+                console.log("data:\n" + data);
+            } else {
+                done(new Error(data.error));
+            }
+        }
+    }, auth(username, password));
+};
+
 // =====================     utils     =====================
 
 function auth(username, password) {

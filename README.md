@@ -29,24 +29,9 @@ https://ecomsvn.officedepot.com/rest-service/reviews-v1/filter/toReview
 [activities]
 https://officedepot.atlassian.net/activity?maxResults=2&streams=user+IS+patrick.wunier
 
-[changeset]
+* [changeset]
 https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changesetList/ECOM?start=20140616T180000
 https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changeset/ECOM/{csid}
-
-
-https://ecomsvn.officedepot.com/changelog/~rss,br=1.6,feedspan=2mo,feedmax=10/FE/rss.xml
-https://ecomsvn.officedepot.com/rest/api/1.0/rest-service-fecru/users?size=50&limit=50
-https://ecomsvn.officedepot.com/rest/api/1.0/rest-service-fe/changeset-v1
-
-
-https://ecomsvn.officedepot.com/rest-service-fe/changeset-v1/listChangesets?rep=ECOM&path=trunk&committer=hao.chen2
-https://ecomsvn.officedepot.com/rest-service-fecru/admin/users/hao.chen2
-rep=<value>&path=<value>&committer=<value>&comment=<value>&p4JobFixed=<value>&expand=<value>&beforeCsid=<value>
-
-
-https://ecomsvn.officedepot.com/rest-service/users-v1/hao.chen2
-https://jira.atlassian.com/plugins/servlet/restbrowser#/
-https://officedepot.atlassian.net/plugins/servlet/restbrowser#/
 
 [taobao ip]
 http://ip.taobao.com/service/getIpInfo.php?ip=202.114.101.93

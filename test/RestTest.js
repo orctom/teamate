@@ -1,8 +1,6 @@
 var api = require('../app/middlewares/API');
 
-var username = 'hao.chen2';
-var password = '123qweasd';
-var token = "hao.chen2:275:6e923ac6c4fbc9038dcb62784aba30f9";
+
 
 function login() {
     api.login(username, password, function(error, data) {
@@ -31,4 +29,10 @@ function changes() {
     });
 }
 
-changes();
+function activities() {
+    api.activities(username, password, function(error, data) {
+        console.log('error ' + error);
+    });
+}
+
+activities();
