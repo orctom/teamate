@@ -9,28 +9,29 @@ https://docs.atlassian.com/fisheye-crucible/latest/wadl/crucible.html
 https://docs.atlassian.com/fisheye-crucible/latest/wadl/fisheye.html [??]
 https://docs.atlassian.com/software/jira/docs/api/REST/latest/
 
-[get details of a JIRA]
+* [get details of a JIRA]
 https://officedepot.atlassian.net/rest/api/2/issue/NAECOM-839
 
-[query jira list]
+* [query jira list]
 https://officedepot.atlassian.net/rest/api/2/search?jql=status+in+(Open,+%22In+Progress%22,+Reopened,+%22Pending+test%22,+Rejected,+%22Code+Review%22,+Review)+AND+assignee+in+(currentUser())
 https://officedepot.atlassian.net/rest/api/2/search?jql=status+in+(Open,+%22In+Progress%22,+Reopened,+%22Pending+test%22,+Rejected,+%22Code+Review%22,+Review)+AND+assignee+in+(bin.yang,+huawei.zhu)
 https://officedepot.atlassian.net/rest/api/2/search?jql=status in (Open, "In Progress", Reopened, "Pending test", Rejected, "Code Review", Review) AND assignee in (hao.chen2)
 
-[get user info]
+* [get user info]
 https://ecomsvn.officedepot.com/rest-service/users-v1/hao.chen2
 
-[login]
+* [login]
 https://ecomsvn.officedepot.com/rest-service/auth-v1/login?userName=hao.chen2&password=
-https://developer.atlassian.com/display/FECRUDEV/Authenticating+REST+Requests
 
-[get code reveiws toReview]
+* [get code reveiws toReview]
 https://ecomsvn.officedepot.com/rest-service/reviews-v1/filter/toReview
 
 [activities]
-https://ecomsvn.officedepot.com/user/shengbin.cao?RSS=true
-https://ecomsvn.officedepot.com/user/shengbin.cao?max=100&name=shengbin.cao&view=fe&FEAUTH=hao.chen2%3A528%3A5554970dd0662073c4ac6fe3301924ed&RSS=true
 https://officedepot.atlassian.net/activity?maxResults=2&streams=user+IS+patrick.wunier
+
+[changeset]
+https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changesetList/ECOM?start=20140616T180000
+https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changeset/ECOM/{csid}
 
 
 https://ecomsvn.officedepot.com/changelog/~rss,br=1.6,feedspan=2mo,feedmax=10/FE/rss.xml
@@ -49,3 +50,13 @@ https://officedepot.atlassian.net/plugins/servlet/restbrowser#/
 
 [taobao ip]
 http://ip.taobao.com/service/getIpInfo.php?ip=202.114.101.93
+
+
+var mytask = {
+	task: jira,
+	category: 'work/personal'
+};
+
+var worklog = {
+	date: task
+}

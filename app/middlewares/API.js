@@ -1,5 +1,8 @@
 var rest = require('./rest');
 
+var jiraPattern = /\[?(\w+\-\d+)\]?.*/;
+
+// =====================     fisheye-crucible     =====================
 exports.login = function(username, password, done) {
     var params = {
         userName: username,
@@ -42,15 +45,10 @@ exports.profile = function(username, token, done) {
         } else {
             if (data.userData) {
                 var userData = data.userData;
-                var avatar = String(userData.avatarUrl);
-                var questionMarkIndex = avatar.indexOf("?");
-                if (questionMarkIndex > 0) {
-                    avatar = avatar.substring(0, questionMarkIndex);
-                }
-                var name = userData.displayName;
                 var user = {
-                    'avatar': avatar,
-                    'name': name
+                    name: userData.displayName,
+                    username: userData.name,
+                    avatarUrl: getAvatarUrl(userData.name)
                 };
                 done(null, user);
             } else {
@@ -59,6 +57,85 @@ exports.profile = function(username, token, done) {
         }
     });
 };
+
+exports.reviews = function(token, done) {
+    var params = {
+        FEAUTH: token
+    };
+    var url = "https://ecomsvn.officedepot.com/rest-service/reviews-v1/filter/toReview";
+    rest.get(url, params, function(error, data) {
+        if (error) {
+            done(error);
+        } else {
+            if (data && data.reviewData) {
+                var reviews = [];
+                for (var i in data.reviewData) {
+                    var reviewData = data.reviewData[i];
+                    var review = {
+                        key: reviewData.projectKey,
+                        name: reviewData.name,
+                        author: {
+                            name: reviewData.author.displayName,
+                            username: reviewData.author.userName,
+                            avatarUrl: getAvatarUrl(reviewData.author.userName)
+                        }
+                    };
+                    reviews.push(review);
+                }
+                done(null, reviews);
+            } else {
+                done(new Error(data.error));
+            }
+        }
+    });
+};
+
+exports.changeset = function(token, done) {
+    var params = {
+        FEAUTH: token,
+        start: getDateString(-3600000 * 12)
+    };
+    var url = "https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changesetList/ECOM";
+    rest.get(url, params, function(error, data) {
+        if (error) {
+            done(error);
+        } else {
+            if (data && data.csid) {
+                done(null, data.csid);
+            } else {
+                done(new Error(data.error));
+            }
+        }
+    });
+};
+
+exports.changes = function(csid, token, done) {
+    var params = {
+        FEAUTH: token,
+    };
+    var url = "https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changeset/ECOM/" + csid;
+    rest.get(url, params, function(error, data) {
+        if (error) {
+            done(error);
+        } else {
+            if (data) {
+                var jira = jiraPattern.test(data.comment) ? data.comment.replace(jiraPattern, '$1') : null;
+                var changes = {
+                    jira: jira,
+                    date: data.date,
+                    author: data.author,
+                    comment: data.comment,
+                    fileset: data.fileRevisionKey
+                };
+                done(null, changes);
+            } else {
+                done(new Error(data.error));
+            }
+        }
+    });
+};
+
+// =====================     jira     =====================
 
 exports.jiras = function(username, password, done) {
     var params = {
@@ -71,43 +148,9 @@ exports.jiras = function(username, password, done) {
         } else {
             if (data.issues) {
                 var issues = [];
-                console.log("length= " + data.issues.length);
                 for (var i in data.issues) {
-                    console.log("====== start =======");
-                    console.log(data.issues[i])
-                    console.log("=====================");
-                    var key = data.issues[i].key;
-                    var fields = data.issues[i].fields;
-                    var issue = {
-                        key: key,
-                        summary: fields.summary,
-                        issuetype: {
-                            name: fields.issuetype.name,
-                            subtask: fields.issuetype.subtask
-                        },
-                        assignee: {
-                            name: fields.assignee.displayName,
-                            username: fields.assignee.name,
-                            avatar: fields.assignee.avatarUrls['48x48']
-                        },
-                        reporter: {
-                            name: fields.reporter.displayName,
-                            username: fields.reporter.name,
-                            avatar: fields.reporter.avatarUrls['48x48']
-                        },
-                        priority: {
-                            name: fields.priority.name,
-                            icon: fields.priority.iconUrl
-                        },
-                        status: {
-                            name: fields.status.name,
-                            icon: fields.status.iconUrl
-                        },
-                        component: fields.components,
-                        fixVersion: fields.fixVersion
-                    };
+                    var issue = getJIRA(data.issues[i]);
                     issues.push(issue);
-                    console.log(JSON.stringify(issue));
                 }
 
                 done(null, issues);
@@ -118,9 +161,72 @@ exports.jiras = function(username, password, done) {
     }, auth(username, password));
 };
 
+exports.jira = function(jira, username, password, done) {
+    var url = "https://officedepot.atlassian.net/rest/api/2/issue/" + jira;
+    rest.get(url, null, function(error, data) {
+        if (error) {
+            done(error);
+        } else {
+            if (data) {
+                var issue = getJIRA(data);
+                done(null, issue);
+            } else {
+                done(new Error(data.error));
+            }
+        }
+    }, auth(username, password));
+};
+
+// =====================     utils     =====================
+
 function auth(username, password) {
     return {
         username: username,
         password: password
     }
+}
+
+function getJIRA(data) {
+    var key = data.key;
+    var fields = data.fields;
+    return {
+        key: key,
+        summary: fields.summary,
+        issuetype: {
+            name: fields.issuetype.name,
+            subtask: fields.issuetype.subtask
+        },
+        assignee: {
+            name: fields.assignee.displayName,
+            username: fields.assignee.name,
+            avatarUrl: getAvatarUrl(fields.assignee.name)
+        },
+        reporter: {
+            name: fields.reporter.displayName,
+            username: fields.reporter.name,
+            avatarUrl: getAvatarUrl(fields.reporter.name)
+        },
+        priority: {
+            name: fields.priority.name,
+            icon: fields.priority.iconUrl
+        },
+        status: {
+            name: fields.status.name,
+            icon: fields.status.iconUrl
+        },
+        component: fields.components,
+        fixVersion: fields.fixVersions
+    };
+}
+
+// use jira avatar
+function getAvatarUrl(username) {
+    return 'https://officedepot.atlassian.net/secure/useravatar?ownderId=' + username;
+}
+
+function getDateString(delta) {
+    var date = new Date();
+    var offset = delta ? -date.getTimezoneOffset() * 60000 + delta : -date.getTimezoneOffset() * 60000;
+    date.setTime(date.getTime() + offset);
+    return date.toJSON();
 }
