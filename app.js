@@ -1,5 +1,6 @@
+var config = require('./config');
+
 var express = require('express');
-var http = require('http');
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
@@ -8,9 +9,7 @@ var bodyParser = require('body-parser');
 
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/teamate');
-
-var rest = require('restler');
+var db = monk(config.mongodb.url);
 
 var passport = require('passport');
 
@@ -18,7 +17,8 @@ var app = express();
 
 // General Setup
 app.configure(function() {
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', process.env.PORT || config.port);
+    app.set('env', config.env);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'jade');
 
@@ -30,7 +30,7 @@ app.configure(function() {
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.use(express.session({
-        secret: 'hdgfhasgfhasdhfjhj234h2uiorh'
+        secret: config.session.secret
     }));
     app.use(passport.initialize());
     app.use(passport.session());
@@ -51,14 +51,11 @@ require('./config/error-handler')(app);
 // routes
 require('./app/routes.js')(app, passport);
 
-// ENV
-var env = process.env.NODE_ENV || 'development';
-
 app.configure('development', function() {
     app.use(express.errorHandler());
 });
 
-// sheduler
+// scheduler
 var schedule = require('node-schedule');
 schedule.scheduleJob('* * * * *', function() {
     console.log('The answer to life, the universe, and everything! ' + new Date());

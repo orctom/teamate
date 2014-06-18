@@ -1,6 +1,9 @@
 var api = require('../app/middlewares/API');
+var config = require('../config');
 
-
+var username = config.auth.username;
+var password = config.auth.password;
+var token = config.auth.token;
 
 function login() {
     api.login(username, password, function(error, data) {

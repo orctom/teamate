@@ -11,17 +11,12 @@ exports.post = function(url, params, callback, auth) {
 
 exports.pipe = function(url, params, pipe, auth) {
     var options = getOptions(url, 'GET', params, auth);
-    console.log("url : " + options.url);
     request(options).pipe(pipe);
 };
 
 function call(url, method, params, callback, auth) {
     var options = getOptions(url, method, params, auth);
     request(options, function(error, res, data) {
-        console.log("====== rest call start ======");
-        console.log("url : " + url);
-        console.log("data: " + JSON.stringify(data));
-        console.log("====== rest call end   ======");
         callback(error, data);
     });
 }
