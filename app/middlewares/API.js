@@ -1,4 +1,8 @@
 var rest = require('./rest');
+var FeedParser = require('feedparser');
+var feedparser = new FeedParser({
+    addmeta: false
+});
 
 var jiraPattern = /\[?(\w+\-\d+)\]?.*/;
 
@@ -90,10 +94,11 @@ exports.reviews = function(token, done) {
     });
 };
 
+// should be called every 30 minutes
 exports.changeset = function(token, done) {
     var params = {
         FEAUTH: token,
-        start: getDateString(-3600000 * 12)
+        start: getDateString(-1800000 * 1)
     };
     var url = "https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changesetList/ECOM";
     rest.get(url, params, function(error, data) {
@@ -199,19 +204,29 @@ exports.search = function(jql, username, password, done, startAt) {
     }, auth(username, password));
 };
 
+// should be called every 15 minutes
 exports.activities = function(username, password, done) {
-    var url = "https://officedepot.atlassian.net/activity";
-    rest.get(url, null, function(error, data) {
-        if (error) {
-            done(error);
-        } else {
-            if (data) {
-                console.log("data:\n" + data);
-            } else {
-                done(new Error(data.error));
-            }
+    var now = new Date();
+    var start = now.getTime() - 900000;
+    var end = now.getTime();
+    var url = "https://officedepot.atlassian.net/activity?maxResults=200&streams=update-date+BETWEEN+" + start + "+" + end;
+    rest.pipe(url, null, feedparser, auth(username, password));
+    feedparser.on('readable', function() {
+        var stream = this;
+        var item;
+        while (item = stream.read()) {
+            var activity = {
+                title: item.title,
+                date: item.date,
+                link: item.link,
+                guid: item.guid,
+                categories: item.categories,
+                username: item['atom:author']['usr:username']['#'],
+                timezone: item['atlassian:timezone-offset']['#']
+            };
+            done(null, activity);
         }
-    }, auth(username, password));
+    });
 };
 
 // =====================     utils     =====================

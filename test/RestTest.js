@@ -30,8 +30,11 @@ function changes() {
 }
 
 function activities() {
+    var count = 0;
     api.activities(username, password, function(error, data) {
         console.log('error ' + error);
+        console.log("-------------------------------------------- " + ++count);
+        console.log(data.date);
     });
 }
 
