@@ -57,9 +57,7 @@ app.configure('development', function() {
 
 // scheduler
 var schedule = require('node-schedule');
-schedule.scheduleJob('* * * * *', function() {
-    console.log('The answer to life, the universe, and everything! ' + new Date());
-});
+require('./app/middlewares/scheduler')(config, schedule);
 
 
 app.listen(app.get('port'), function() {

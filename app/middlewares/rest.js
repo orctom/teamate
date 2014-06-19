@@ -42,5 +42,7 @@ function getOptions(url, method, params, auth) {
         options.auth = auth;
     }
 
+    console.log('url : ' + url);
+
     return options;
 }

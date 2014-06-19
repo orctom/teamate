@@ -4,6 +4,7 @@ var feedparser = new FeedParser({
     addmeta: false
 });
 
+var oneMonthAgo = -3600000 * 24 * 30;
 var jiraPattern = /\[?(\w+\-\d+)\]?.*/;
 
 // =====================     fisheye-crucible     =====================
@@ -94,12 +95,18 @@ exports.reviews = function(token, done) {
     });
 };
 
-// should be called every 30 minutes
-exports.changeset = function(token, done) {
+exports.changeset = function(token, done, start) {
+    console.log("start = " + start);
+    if (!start) {
+        start = getDateString(null, oneMonthAgo)
+    } else {
+        start = getDateString(start);
+    }
     var params = {
         FEAUTH: token,
-        start: getDateString(-1800000 * 1)
+        start: start
     };
+    console.log("start = " + start);
     var url = "https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changesetList/ECOM";
     rest.get(url, params, function(error, data) {
         if (error) {
@@ -204,12 +211,13 @@ exports.search = function(jql, username, password, done, startAt) {
     }, auth(username, password));
 };
 
-// should be called every 15 minutes
-exports.activities = function(username, password, done) {
-    var now = new Date();
-    var start = now.getTime() - 900000;
-    var end = now.getTime();
-    var url = "https://officedepot.atlassian.net/activity?maxResults=200&streams=update-date+BETWEEN+" + start + "+" + end;
+exports.activities = function(username, password, done, after) {
+    if (!after) {
+        after = new Date().getTime() + oneMonthAgo;
+    }
+    var url = "https://officedepot.atlassian.net/activity?maxResults=200&streams=update-date+AFTER+" + after;
+    console.log("after: " + new Date(after));
+    console.log("url  : " + url);
     rest.pipe(url, null, feedparser, auth(username, password));
     feedparser.on('readable', function() {
         var stream = this;
@@ -226,6 +234,10 @@ exports.activities = function(username, password, done) {
             };
             done(null, activity);
         }
+    });
+
+    feedparser.on('error', function(error) {
+        console.log('Failed to parse activities: ' + error);
     });
 };
 
@@ -276,8 +288,10 @@ function getAvatarUrl(username) {
     return 'https://officedepot.atlassian.net/secure/useravatar?ownderId=' + username;
 }
 
-function getDateString(delta) {
-    var date = new Date();
+function getDateString(date, delta) {
+    if (!date) {
+        date = new Date();
+    }
     var offset = delta ? -date.getTimezoneOffset() * 60000 + delta : -date.getTimezoneOffset() * 60000;
     date.setTime(date.getTime() + offset);
     return date.toJSON();

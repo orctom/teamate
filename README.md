@@ -26,7 +26,7 @@ https://ecomsvn.officedepot.com/rest-service/auth-v1/login?userName=hao.chen2&pa
 * [get code reveiws toReview]
 https://ecomsvn.officedepot.com/rest-service/reviews-v1/filter/toReview
 
-[activities]
+* [activities]
 https://officedepot.atlassian.net/activity?maxResults=2&streams=user+IS+patrick.wunier
 
 * [changeset]

@@ -1,6 +1,10 @@
 var api = require('../app/middlewares/API');
 var config = require('../config');
 
+var db = require('monk')(config.mongodb.url);
+var changes = db.get('changes');
+var activities = db.get('activities');
+
 var username = config.auth.username;
 var password = config.auth.password;
 var token = config.auth.token;
@@ -18,27 +22,71 @@ function reviews() {
     });
 }
 
-function changes() {
-    api.changeset(token, function(error, data) {
-        console.log('error ' + error);
-        var csids = data;
-        for (var i in csids) {
-            var csid = csids[i];
-            api.changes(csid, token, function(error, data) {
-                console.log('error ' + error);
-                console.dir(data);
-            });
-        }
-    });
-}
-
-function activities() {
+function testChanges() {
     var count = 0;
-    api.activities(username, password, function(error, data) {
-        console.log('error ' + error);
-        console.log("-------------------------------------------- " + ++count);
-        console.log(data.date);
+    var lastChangeDate;
+    changes.find({}, {
+        limit: 1,
+        sort: {
+            date: -1
+        }
+    }, function(error, lastChanges) {
+        if (lastChanges && lastChanges[0]) {
+            lastChangeDate = lastChanges[0].date;
+        }
+
+        console.log("lastChangeDate: " + lastChangeDate);
+
+        api.changeset(token, function(error, csids) {
+            if (!error && csids) {
+                for (var i in csids) {
+                    var csid = csids[i];
+                    api.changes(csid, token, function(error, data) {
+                        console.log("---------------------- " + ++count);
+                        console.log(data.date);
+                        if (!error) {
+                            changes.find({
+                                date: data.date
+                            }, function(error, exists) {
+                                if (!exists || exists.length < 1) {
+                                    changes.insert(data);
+                                    console.log("saved changes");
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }, new Date(lastChangeDate));
     });
 }
 
-activities();
+function testActivities() {
+    console.log('============= loading activities ============== ' + new Date());
+    var count = 0;
+    var lastActivityDate;
+    activities.find({}, {
+        limit: 1,
+        sort: {
+            date: -1
+        }
+    }, function(error, lastActivities) {
+        if (lastActivities && lastActivities[0]) {
+            lastActivityDate = lastActivities[0].date;
+        }
+        api.activities(config.auth.username, config.auth.password, function(error, data) {
+            console.log("-------------------------------------------- " + ++count);
+            console.log(data.date + " - " + data.username);
+            activities.find({
+                guid: data.guid
+            }, function(error, exists) {
+                if (!exists || exists.length < 1) {
+                    activities.insert(data);
+                    console.log("saved activity");
+                }
+            });
+        }, new Date(lastActivityDate).getTime());
+    });
+}
+
+testChanges();
