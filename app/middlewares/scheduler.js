@@ -56,7 +56,7 @@ module.exports = function(config, schedule) {
 
             console.log("lastChangeDate: " + lastChangeDate);
 
-            api.changeset(token, function(error, csids) {
+            api.changeset(config.auth.token, function(error, csids) {
                 if (!error && csids) {
                     for (var i in csids) {
                         var csid = csids[i];

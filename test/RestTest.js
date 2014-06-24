@@ -89,4 +89,23 @@ function testActivities() {
     });
 }
 
-testChanges();
+function testWatches() {
+    api.search('issue in watchedIssues()', username, password, function(error, data) {
+        for (var i in data) {
+            var issue = data[i];
+            var status = issue.status.name;
+            console.log("status : " + status);
+            if ('Closed' == status || 'Resolved' == status) {
+                console.log("unwatch")
+                api.unwatch(issue.key, username, password);
+            }
+        }
+    });
+}
+
+function testUnwtch() {
+    api.unwatch('WWWCU-31527', username, password);
+}
+
+testWatches();
+//testUnwtch();

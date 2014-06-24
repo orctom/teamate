@@ -1,8 +1,5 @@
 var rest = require('./rest');
 var FeedParser = require('feedparser');
-var feedparser = new FeedParser({
-    addmeta: false
-});
 
 var oneMonthAgo = -3600000 * 24 * 30;
 var jiraPattern = /\[?(\w+\-\d+)\]?.*/;
@@ -202,10 +199,32 @@ exports.search = function(jql, username, password, done, startAt) {
             done(error);
         } else {
             if (data) {
-                var issue = getJIRA(data);
-                done(null, issue);
+                var issues = [];
+                for (var i in data.issues) {
+                    var issue = getJIRA(data.issues[i]);
+                    issues.push(issue);
+                }
+                done(null, issues);
             } else {
                 done(new Error(data.error));
+            }
+        }
+    }, auth(username, password));
+};
+
+exports.unwatch = function(jira, username, password, done) {
+    var params = {
+        username: username
+    }
+    var url = "https://officedepot.atlassian.net/rest/api/2/issue/" + jira + "/watchers";
+    rest.delete(url, params, function(error, data) {
+        console.log("error: " + error);
+        console.log("data : " + data);
+        if (error) {
+            done(error);
+        } else {
+            if (data) {
+                done(null, data);
             }
         }
     }, auth(username, password));
@@ -218,6 +237,9 @@ exports.activities = function(username, password, done, after) {
     var url = "https://officedepot.atlassian.net/activity?maxResults=200&streams=update-date+AFTER+" + after;
     console.log("after: " + new Date(after));
     console.log("url  : " + url);
+    var feedparser = new FeedParser({
+        addmeta: false
+    });
     rest.pipe(url, null, feedparser, auth(username, password));
     feedparser.on('readable', function() {
         var stream = this;
