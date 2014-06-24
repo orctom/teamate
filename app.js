@@ -3,17 +3,17 @@ var config = require('./config');
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk(config.mongodb.url);
 
 var passport = require('passport');
 
 var app = express();
+
+var logger = require('./config/logger');
 
 // General Setup
 app.configure(function() {
@@ -23,7 +23,6 @@ app.configure(function() {
     app.set('view engine', 'jade');
 
     app.use(favicon());
-    app.use(logger('dev'));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded());
     app.use(cookieParser());
@@ -49,7 +48,7 @@ require('./config/passport')(passport);
 require('./config/error-handler')(app);
 
 // routes
-require('./app/routes.js')(app, passport);
+require('./app/routes.js')(app, passport, db, config, logger);
 
 app.configure('development', function() {
     app.use(express.errorHandler());
@@ -57,7 +56,7 @@ app.configure('development', function() {
 
 // scheduler
 var schedule = require('node-schedule');
-require('./app/middlewares/scheduler')(config, schedule);
+require('./app/middlewares/scheduler')(config, schedule, logger);
 
 
 app.listen(app.get('port'), function() {

@@ -6,5 +6,8 @@ config.mongodb = {
 };
 config.session = {
     secret: 'hdgfhasgfhasdhfjhj234h2uiorh'
-}
+};
+config.privilege = {
+    'hao.chen2': 'admin'
+};
 config.scheduler = {};

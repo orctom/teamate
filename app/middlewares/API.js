@@ -230,6 +230,18 @@ exports.unwatch = function(jira, username, password, done) {
     }, auth(username, password));
 };
 
+exports.unwatchFinishedJIRAs = function(username, password) {
+    exports.search('issue in watchedIssues()', username, password, function(error, data) {
+        for (var i in data) {
+            var issue = data[i];
+            var status = issue.status.name;
+            if ('Closed' == status || 'Resolved' == status) {
+                exports.unwatch(issue.key, username, password);
+            }
+        }
+    });
+};
+
 exports.activities = function(username, password, done, after) {
     if (!after) {
         after = new Date().getTime() + oneMonthAgo;

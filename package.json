@@ -22,6 +22,7 @@
         "node-schedule": "~0.1.13",
         "passport": "~0.2.0",
         "passport-local": "~1.0.0",
-        "feedparser": "~0.17.0"
+        "feedparser": "~0.17.0",
+        "winston": "~0.7.3"
     }
 }

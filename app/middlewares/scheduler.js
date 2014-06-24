@@ -3,10 +3,11 @@ var api = require('./API');
 var activityCron = '*/15 * * * *';
 var changesCron = '*/30 * * * *';
 
-module.exports = function(config, schedule) {
+module.exports = function(config, schedule, logger) {
     var db = require('monk')(config.mongodb.url);
-    var activities = db.get('activities');
-    var changes = db.get('changes');
+    var activity = db.get('activity');
+    var change = db.get('change');
+    var user = db.get('user');
 
     schedule.scheduleJob('* * * * *', function() {
         console.log('The answer to life, the universe, and everything! ' + new Date());
@@ -16,7 +17,7 @@ module.exports = function(config, schedule) {
         console.log('============= loading activities ============== ' + new Date());
         var count = 0;
         var lastActivityDate;
-        activities.find({}, {
+        activity.find({}, {
             limit: 1,
             sort: {
                 date: -1
@@ -28,12 +29,23 @@ module.exports = function(config, schedule) {
             api.activities(config.auth.username, config.auth.password, function(error, data) {
                 console.log("-------------------------------------------- " + ++count);
                 console.log(data.date + " - " + data.username);
-                activities.find({
+                activity.find({
                     guid: data.guid
                 }, function(error, exists) {
                     if (!exists || exists.length < 1) {
-                        activities.insert(data);
+                        activity.insert(data);
                         console.log("saved activity");
+                    }
+                });
+
+                user.find({
+                    username: data.username
+                }, function(error, exist) {
+                    if (error) {
+                        console.log("" + error);
+                    }
+                    if (!error && exist) {
+
                     }
                 });
             }, new Date(lastActivityDate).getTime());
@@ -44,7 +56,7 @@ module.exports = function(config, schedule) {
         console.log('============= loading changesets ============== ' + new Date());
         var count = 0;
         var lastChangeDate;
-        changes.find({}, {
+        change.find({}, {
             limit: 1,
             sort: {
                 date: -1
@@ -64,11 +76,11 @@ module.exports = function(config, schedule) {
                             console.log("---------------------- " + ++count);
                             console.log(data.date);
                             if (!error) {
-                                changes.find({
+                                change.find({
                                     date: data.date
                                 }, function(error, exists) {
                                     if (!exists || exists.length < 1) {
-                                        changes.insert(data);
+                                        change.insert(data);
                                         console.log("saved changes");
                                     }
                                 });
