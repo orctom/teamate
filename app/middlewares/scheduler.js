@@ -72,7 +72,7 @@ module.exports = function(config, schedule, logger) {
                 if (!error && csids) {
                     for (var i in csids) {
                         var csid = csids[i];
-                        api.changes(csid, token, function(error, data) {
+                        api.changes(csid, config.auth.token, function(error, data) {
                             console.log("---------------------- " + ++count);
                             console.log(data.date);
                             if (!error) {
