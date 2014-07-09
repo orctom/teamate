@@ -10,4 +10,6 @@ config.session = {
 config.privilege = {
     'hao.chen2': 'admin'
 };
-config.scheduler = {};
+config.scheduler = {
+    enabled: true
+};
