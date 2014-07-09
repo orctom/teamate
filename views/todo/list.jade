@@ -1,0 +1,18 @@
+extends ../layout/layout
+
+block content
+	.row
+		.col-lg-12
+			h1.page-header TODO List
+
+	.row
+		.col-lg-12
+			ui
+				each todo, i in todos
+					li
+						p todo.content
+
+	.row
+		.col-lg-12
+			a(href='todo/add').btn.btn-default Add
+		

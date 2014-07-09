@@ -1,6 +1,7 @@
 var API = require('./middlewares/API');
 var config = require('../config');
 var profile = require('./profile');
+var todo = require('./todo');
 var admin = require('./admin');
 
 module.exports = function(app, passport, db, logger) {
@@ -23,8 +24,10 @@ module.exports = function(app, passport, db, logger) {
     app.get('/users', requireLogin, profile.users(db));
     app.get('/groups', requireLogin, profile.groups(db));
 
-    //=====================   calendar   =======================
-
+    //=====================   todo   =======================
+    app.get('/todo', requireLogin, todo.list(db));
+    app.get('/todo/add', requireLogin, todo.add);
+    app.post('/todo/add', requireLogin, todo.save(db));
 
     //=====================   admin (maintain groups)  =======================
     app.get('/admin/groups', requireAdmin, admin.groups);

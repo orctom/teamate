@@ -1,5 +1,3 @@
-var API = require('./middlewares/API');
-
 exports.usersOfGroup = function(db) {
     return function(req, res) {
         var group = db.get('group');

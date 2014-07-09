@@ -1,0 +1,20 @@
+extends ../layout/layout
+
+block content
+	.row
+		.col-lg-12
+			h1.page-header Add ToDo Item
+
+	.row
+		.col-lg-12
+			.panel.panel-default
+				.panel-heading Add Todo Item
+				.panel-body
+					form(action='/add', method='POST', role='form')
+						fieldset
+							.form-group
+								input.form-control(type='hidden', name='id' value='' )
+							.form-group
+								input.form-control(type='text', required, name='content' value='' placeholder='content' autofocus)
+						button.btn.btn-primary.btn-lg.btn-block(type='submit') Save
+		
