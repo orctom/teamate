@@ -1,113 +1,34 @@
 var API = require('./middlewares/API');
 var config = require('../config');
+var profile = require('./profile');
+var admin = require('./admin');
 
 module.exports = function(app, passport, db, logger) {
-    //=====================   security   =======================
-    app.get('/login', function(req, res) {
-        res.render('login', {
-            'failed': req.param("failed")
-        });
-    });
-
-    app.post('/login', function(req, res, next) {
-        passport.authenticate('local', {
-            successRedirect: '/',
-            failureRedirect: '/login?failed=true',
-            failureFlash: true
-        })(req, res, next);
-    });
-
-
-    app.get('/profile', requireLogin, function(req, res) {
-        var user = req.user;
-        API.jiras(user.username, user.password, function(error, data) {
-            logger.info("--------------");
-            logger.info(error);
-            logger.info(data);
-            logger.info("--------------");
-        });
-        res.render('profile', {
-            user: req.user
-        });
-    });
-
-    app.get('/logout', function(req, res) {
-        req.logout();
-        res.redirect('/');
-    });
 
     //=====================   home   =======================
-
     app.get('/', requireLogin, function(req, res) {
         var user = req.user;
         API.jiras(user.username, user.password, function(error, data) {
-            logger.info("--------------");
             logger.info(error);
             logger.info(data);
-            logger.info("--------------");
         });
         res.render('index');
     });
 
+    //=====================   security   =======================
+    app.get('/login', profile.login);
+    app.post('/login', profile.doLogin(passport));
+    app.get('/logout', profile.logout);
+    app.get('/profile', requireLogin, profile.showProfile);
+    app.get('/users', requireLogin, profile.users(db));
+    app.get('/groups', requireLogin, profile.groups(db));
+
     //=====================   calendar   =======================
 
 
-
-    app.get('/users', requireLogin, function(req, res) {
-        var user = db.get('user');
-        user.find({}, {}, function(error, data) {
-            res.render('users', {
-                "users": data
-            });
-        });
-    });
-
-    app.get('/groups', requireLogin, function(req, res) {
-        var group = db.get('group');
-        group.find({}, {}, function(error, data) {
-            res.render('groups', {
-                "groups": data
-            });
-        });
-    });
-
     //=====================   admin (maintain groups)  =======================
-
-    app.get('/settings/groups', requireAdmin, function(req, res) {
-        var group = db.get('group');
-        group.find({}, {}, function(error, data) {
-            res.render('settings/groups', {
-                "groups": data
-            });
-        });
-    });
-
-    app.post('/settings/groups', requireAdmin, function(req, res) {
-        var group = db.get('group');
-        group.find({}, {}, function(error, data) {
-            res.render('settings/groups', {
-                "groups": data
-            });
-        });
-    });
-
-    app.get('/settings/groups/:groupId/users', requireAdmin, function(req, res) {
-        var group = db.get('group');
-        group.find({}, {}, function(error, data) {
-            res.render('settings/groups/users', {
-                "users": data
-            });
-        });
-    });
-
-    app.post('/settings/groups/:groupId/users', requireAdmin, function(req, res) {
-        var group = db.get('group');
-        group.find({}, {}, function(error, data) {
-            res.render('settings/groups/users', {
-                "users": data
-            });
-        });
-    });
+    app.get('/admin/groups', requireAdmin, admin.groups);
+    app.get('/admin/group/:groupId/users', requireAdmin, admin.usersOfGroup);
 };
 
 function requireLogin(req, res, next) {
