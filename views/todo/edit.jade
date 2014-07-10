@@ -13,6 +13,8 @@ block content
 					form(action='save', method='POST', role='form')
 						fieldset
 							.form-group
-								input.form-control(type='text', required, name='content' value='' placeholder='to do...' autofocus)
+								input.form-control(type='hidden', name='_id' value='#{todo._id}' )
+							.form-group
+								input.form-control(type='text', required, name='content' value='#{todo.content}' placeholder='content' autofocus)
 						button.btn.btn-primary.btn-lg.btn-block(type='submit') Save
 		

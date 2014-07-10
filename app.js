@@ -5,6 +5,7 @@ var path = require('path');
 var favicon = require('static-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var flash = require('connect-flash');
 
 var monk = require('monk');
 var db = monk(config.mongodb.url);
@@ -29,10 +30,14 @@ app.configure(function() {
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.use(express.session({
-        secret: config.session.secret
+        secret: config.session.secret,
+        cookie: {
+            maxAge: 86400000
+        }
     }));
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use(flash());
 
     app.use(function(req, res, next) {
         res.locals.user = req.user;

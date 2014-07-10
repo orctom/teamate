@@ -1,8 +1,9 @@
 var API = require('./middlewares/API');
 
 exports.login = function(req, res) {
+    var msg = String(req.flash('error'));
     res.render('login', {
-        'failed': req.param("failed")
+        msg: msg
     });
 };
 
@@ -10,7 +11,7 @@ exports.doLogin = function(passport) {
     return function(req, res, next) {
         passport.authenticate('local', {
             successRedirect: '/',
-            failureRedirect: '/login?failed=true',
+            failureRedirect: '/login',
             failureFlash: true
         })(req, res, next);
     }

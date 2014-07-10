@@ -10,10 +10,10 @@ module.exports = function(app, passport, db, logger) {
     app.get('/', requireLogin, function(req, res) {
         var user = req.user;
         API.jiras(user.username, user.password, function(error, data) {
-            logger.info(error);
-            logger.info(data);
+            res.render('index', {
+                jira: data
+            });
         });
-        res.render('index');
     });
 
     //=====================   security   =======================
@@ -27,7 +27,8 @@ module.exports = function(app, passport, db, logger) {
     //=====================   todo   =======================
     app.get('/todo', requireLogin, todo.list(db));
     app.get('/todo/add', requireLogin, todo.add);
-    app.post('/todo/add', requireLogin, todo.save(db));
+    app.get('/todo/edit', requireLogin, todo.edit(db));
+    app.post('/todo/save', requireLogin, todo.save(db));
 
     //=====================   admin (maintain groups)  =======================
     app.get('/admin/groups', requireAdmin, admin.groups);

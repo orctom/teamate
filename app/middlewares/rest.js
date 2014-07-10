@@ -37,7 +37,12 @@ exports.pipe = function(url, params, pipe, auth) {
 function call(url, method, params, callback, auth) {
     var options = getOptions(url, method, params, auth);
     request(options, function(error, res, data) {
-        callback(error, data);
+        try {
+            callback(error, data);
+        } catch (e) {
+            console.log('[ERROR] ' + e.message);
+            callback(data);
+        }
     });
 }
 

@@ -29,8 +29,10 @@ exports.login = function(username, password, done) {
                         return done(null, user);
                     }
                 });
-            } else {
+            } else if (data.loginResult) {
                 done(data.loginResult.error);
+            } else {
+                done(data.message);
             }
         }
     });
