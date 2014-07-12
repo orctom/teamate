@@ -2,6 +2,8 @@ doctype html
 html
 	include header
 	body
+		nav(class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0")
+			include menu
 		.container
 			block content
 		script(src='/js/jquery-1.11.0.min.js')

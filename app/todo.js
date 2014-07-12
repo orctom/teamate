@@ -2,7 +2,6 @@ exports.list = function(db) {
     return function(req, res) {
         var todo = db.get('todo');
         todo.find({}, {}, function(error, data) {
-            console.dir(data);
             res.render('todo/list', {
                 "todos": data
             });
@@ -16,13 +15,9 @@ exports.add = function(req, res) {
 
 exports.edit = function(db) {
     return function(req, res) {
-        var id = req.query.id;
+        var id = req.params.id;
         var todo = db.get('todo');
-        console.log('id = ' + id);
         todo.findById(id, function(error, data) {
-            console.log('error =' + error);
-            console.log('data  =' + data);
-            console.dir(data);
             res.render('todo/edit', {
                 "todo": data
             });
@@ -33,13 +28,39 @@ exports.edit = function(db) {
 exports.save = function(db) {
     return function(req, res) {
         var todo = db.get('todo');
+        var id = req.body._id;
         var data = {
-            _id: req.body._id,
             content: req.body.content,
             tag: req.body.tag
         };
-        todo.insert(data, function(error, data) {
-            res.redirect('/todo');
-        });
+        if (id) {
+            todo.update({
+                _id: id
+            }, data, function(error, data) {
+                res.redirect('/todo');
+            });
+        } else {
+            todo.insert(data, function(error, data) {
+                res.redirect('/todo');
+            });
+        }
+    }
+};
+
+exports.delete = function(db) {
+    return function(req, res) {
+        var todo = db.get('todo');
+        var id = req.params.id;
+        if (id) {
+            todo.remove({
+                _id: id
+            }, function(error, data) {
+                res.redirect('/todo');
+            });
+        } else {
+            res.redirect('/todo', {
+                message: 'Invalid request, "_id" expected.'
+            });
+        }
     }
 };

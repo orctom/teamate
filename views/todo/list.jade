@@ -4,27 +4,35 @@ block content
 	.row
 		.col-lg-12
 			h1.page-header Todo List
-
-	.row
-		.col-lg-12
-			.panel.panel-default
-				.panel-heading My ToDo List
-				.panel-body
-					table.table
-						thead
+			div
+				table.table.table-striped.table-bordered.table-hover
+					thead
+						tr
+							th.col-sm-1 &nbsp;
+							th ToDo
+							th Tags
+					tbody
+						each todo, i in todos
 							tr
-								th &nbsp;
-								th ToDo
-								th Tags
-						tbody
-							each todo, i in todos
-								tr
-									td
-										a(href='todo/edit?id=#{todo._id}') Edit
-									td #{todo.content}
-									td dummy tags
-	.row
-		.col-lg-12
+								td
+									a.btn.btn-info.btn-xs(href='todo/edit/#{todo._id}')
+										span.glyphicon.glyphicon-edit
+									a.btn.btn-warning.btn-xs(href='#' data-href='todo/delete/#{todo._id}' data-toggle='modal' data-target='#confirm-delete')
+										span.glyphicon.glyphicon-remove
+								td #{todo.content}
+								td dummy tags
 			.btn-group
 				a(href='todo/add').btn.btn-default Add
-		
+			#confirm-delete.modal.fade(tabindex='-1' role='dialog'  aria-hidden='true')
+				.modal-dialog
+					.modal-content
+						.modal-body
+							p Sure to Delete?
+						.modal-footer
+							button(data-dismiss='modal').btn.btn-default Cancel
+							a(href='#').btn.btn-danger.danger Delete
+block scripts
+	script
+		|$('#confirm-delete').on('show.bs.modal', function(e) {
+		|	$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+		|});

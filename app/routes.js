@@ -7,14 +7,7 @@ var admin = require('./admin');
 module.exports = function(app, passport, db, logger) {
 
     //=====================   home   =======================
-    app.get('/', requireLogin, function(req, res) {
-        var user = req.user;
-        API.jiras(user.username, user.password, function(error, data) {
-            res.render('index', {
-                jira: data
-            });
-        });
-    });
+    app.get('/', requireLogin, index);
 
     //=====================   security   =======================
     app.get('/login', profile.login);
@@ -27,8 +20,9 @@ module.exports = function(app, passport, db, logger) {
     //=====================   todo   =======================
     app.get('/todo', requireLogin, todo.list(db));
     app.get('/todo/add', requireLogin, todo.add);
-    app.get('/todo/edit', requireLogin, todo.edit(db));
+    app.get('/todo/edit/:id', requireLogin, todo.edit(db));
     app.post('/todo/save', requireLogin, todo.save(db));
+    app.get('/todo/delete/:id', requireLogin, todo.delete(db));
 
     //=====================   admin (maintain groups)  =======================
     app.get('/admin/groups', requireAdmin, admin.groups);
@@ -55,4 +49,13 @@ function requireAdmin(req, res, next) {
     } else {
         res.redirect('/login');
     }
+}
+
+function index(req, res) {
+    var user = req.user;
+    API.jiras(user.username, user.password, function(error, data) {
+        res.render('index', {
+            jira: data
+        });
+    });
 }
