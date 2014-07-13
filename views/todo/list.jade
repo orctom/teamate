@@ -8,17 +8,17 @@ block content
 				table.table.table-striped.table-bordered.table-hover
 					thead
 						tr
-							th.col-sm-1 &nbsp;
-							th ToDo
-							th Tags
+							th.col-lg-1 &nbsp;
+							th.col-lg-7 ToDo
+							th.col-lg-4 Tags
 					tbody
 						each todo, i in todos
 							tr
 								td
 									a.btn.btn-info.btn-xs(href='todo/edit/#{todo._id}')
-										span.glyphicon.glyphicon-edit
+										i.glyphicon.glyphicon-edit
 									a.btn.btn-warning.btn-xs(href='#' data-href='todo/delete/#{todo._id}' data-toggle='modal' data-target='#confirm-delete')
-										span.glyphicon.glyphicon-remove
+										i.glyphicon.glyphicon-remove
 								td #{todo.content}
 								td dummy tags
 			.btn-group
@@ -32,7 +32,4 @@ block content
 							button(data-dismiss='modal').btn.btn-default Cancel
 							a(href='#').btn.btn-danger.danger Delete
 block scripts
-	script
-		|$('#confirm-delete').on('show.bs.modal', function(e) {
-		|	$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
-		|});
+	script $('#confirm-delete').on('show.bs.modal', function(e) {$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));});

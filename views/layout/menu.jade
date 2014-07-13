@@ -8,8 +8,8 @@
 ui.nav.navbar-top-links.navbar-right
 	if user
 		a(href='/profile')
-			i.fa.fa-user.fa-fw 
-			| #{user.name}
+			img(src='#{user.avatarUrl}?s=24')
+			|&nbsp;#{user.name}
 	li.dropdown
 		a(class="dropdown-toggle" data-toggle="dropdown" href="#")
 			i.fa.fa-gears.fa-fw

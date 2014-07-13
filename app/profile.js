@@ -18,11 +18,6 @@ exports.doLogin = function(passport) {
 };
 
 exports.showProfile = function(req, res) {
-    var user = req.user;
-    API.jiras(user.username, user.password, function(error, data) {
-        logger.info(error);
-        logger.info(data);
-    });
     res.render('profile', {
         user: req.user
     });

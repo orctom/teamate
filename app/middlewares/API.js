@@ -51,8 +51,8 @@ exports.profile = function(username, token, done) {
                 var userData = data.userData;
                 var user = {
                     name: userData.displayName,
-                    username: userData.name,
-                    avatarUrl: getAvatarUrl(userData.name)
+                    username: userData.userName,
+                    avatarUrl: getAvatarUrl(userData.userName)
                 };
                 done(null, user);
             } else {
@@ -321,7 +321,7 @@ function getJIRA(data) {
 
 // use jira avatar
 function getAvatarUrl(username) {
-    return 'https://officedepot.atlassian.net/secure/useravatar?ownderId=' + username;
+    return 'https://ecomsvn.officedepot.com/avatar/' + username;
 }
 
 function getDateString(date, delta) {
