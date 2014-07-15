@@ -2,12 +2,13 @@ var API = require('./middlewares/API');
 var config = require('../config');
 var profile = require('./profile');
 var todo = require('./todo');
+var calendar = require('./calendar');
 var admin = require('./admin');
 
 module.exports = function(app, passport, db, logger) {
 
     //=====================   home   =======================
-    app.get('/', requireLogin, index);
+    app.get('/', calendar.dashboard(db));
 
     //=====================   security   =======================
     app.get('/login', profile.login);
@@ -23,6 +24,10 @@ module.exports = function(app, passport, db, logger) {
     app.get('/todo/edit/:id', requireLogin, todo.edit(db));
     app.post('/todo/save', requireLogin, todo.save(db));
     app.get('/todo/delete/:id', requireLogin, todo.delete(db));
+
+    //=====================   calendar   =======================
+    app.get('/calendar/events.json', calendar.events(db));
+    app.post('/calendar/events', calendar.update(db));
 
     //=====================   admin (maintain groups)  =======================
     app.get('/admin/groups', requireAdmin, admin.groups);
