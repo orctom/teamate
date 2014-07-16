@@ -6,7 +6,7 @@ body {
     background-color: #f8f8f8;
     padding-top: 100px;
 }
-@media (min-width: 768px) {
+@media (min-width:768px) {
     body {
         padding-top: 50px;
     }
@@ -24,8 +24,8 @@ body {
     left: 700px;
     width: 100%;
 }
-/* Wrappers */
 
+/* Wrappers */
 /* ------------------------------- */
 
 .modal-dialog-wide {
@@ -48,7 +48,7 @@ body {
     min-height: 568px;
     background-color: #fff;
 }
-@media (min-width: 768px) {
+@media (min-width:768px) {
     #page-wrapper {
         position: inherit;
         margin: 0 0 0 250px;
@@ -60,8 +60,8 @@ body {
 .navbar-static-side ul li {
     border-bottom: 1px solid #e7e7e7;
 }
-/* Navigation */
 
+/* Navigation */
 /* ------------------------------- */
 
 /* Top Right Navigation Dropdown Styles */
@@ -106,8 +106,8 @@ body {
     right: 0;
     left: auto;
 }
-/* Sidebar Menu Styles */
 
+/* Sidebar Menu Styles */
 .sidebar-search {
     padding: 15px;
 }
@@ -137,7 +137,7 @@ body {
 .nav-third-level li a {
     padding-left: 52px;
 }
-@media (min-width: 768px) {
+@media (min-width:768px) {
     .navbar-static-side {
         z-index: 1;
         position: absolute;
@@ -148,8 +148,8 @@ body {
         margin-left: auto;
     }
 }
-/* Buttons */
 
+/* Buttons */
 /* ------------------------------- */
 
 .btn-outline {
@@ -175,8 +175,8 @@ body {
 .btn-primary.btn-outline:hover, .btn-success.btn-outline:hover, .btn-info.btn-outline:hover, .btn-warning.btn-outline:hover, .btn-danger.btn-outline:hover {
     color: #fff;
 }
-/* Pages */
 
+/* Pages */
 /* ------------------------------- */
 
 /* Dashboard Chat */
@@ -208,13 +208,13 @@ body {
     height: 350px;
     overflow-y: scroll;
 }
-/* Login Page */
 
+/* Login Page */
 .login-panel {
     margin-top: 25%;
 }
-/* Flot Chart Containers */
 
+/* Flot Chart Containers */
 .flot-chart {
     display: block;
     height: 400px;
@@ -223,8 +223,8 @@ body {
     width: 100%;
     height: 100%;
 }
-/* DataTables Overrides */
 
+/* DataTables Overrides */
 table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled {
     background: transparent;
 }
@@ -247,8 +247,8 @@ table.dataTable thead .sorting:after {
 table tbody tr.highlight td {
     background-color: #FCF8E3 !important;
 }
-/* Circle Buttons */
 
+/* Circle Buttons */
 .btn-circle {
     width: 30px;
     height: 30px;
@@ -299,4 +299,9 @@ table tbody tr.highlight td {
     margin: auto;
     width: 100%;
     height: 100%;
+}
+#event-editor {
+    position: absolute;
+    display: none;
+    z-index: 10000;
 }
