@@ -91,7 +91,8 @@ function closeEventEditor() {
     $('#event-editor').hide();
 }
 
-function saveFromEventEditor() {
+function saveFromEventEditor(event) {
+    event.preventDefault();
     var data = {
         id: $('#event-editor-id').val(),
         start: $('#event-editor-start').val(),

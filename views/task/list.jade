@@ -23,15 +23,16 @@ block content
 							th.col-lg-7 Task
 							th.col-lg-4 Tags
 					tbody
-						each task, i in tasks
-							tr
-								td
-									a.btn.btn-info.btn-xs(href='task/edit/#{task._id}')
-										i.glyphicon.glyphicon-edit
-									a.btn.btn-warning.btn-xs(href='#' data-href='task/delete/#{task._id}' data-toggle='modal' data-target='#confirm-delete')
-										i.glyphicon.glyphicon-remove
-								td #{task.content}
-								td dummy tags
+						if tests
+							each task, i in tasks
+								tr
+									td
+										a.btn.btn-info.btn-xs(href='task/edit/#{task._id}')
+											i.glyphicon.glyphicon-edit
+										a.btn.btn-warning.btn-xs(href='#' data-href='task/delete/#{task._id}' data-toggle='modal' data-target='#confirm-delete')
+											i.glyphicon.glyphicon-remove
+									td #{task.content}
+									td dummy tags
 				.btn-group
 					a(href='task/add').btn.btn-default Add
 			.col-sm-3

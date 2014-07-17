@@ -7,8 +7,8 @@ block content
 			#event-editor.modal
 				.modal-dialog
 					.modal-content
-						.modal-body
-							form#event-editor-form.form-horizontal(role='form')
+						form#event-editor-form.form-horizontal(role='form')
+							.modal-body
 								fieldset
 									.form-group
 										input.form-control(type='hidden', name='id' id='event-editor-id' value='')
@@ -23,7 +23,7 @@ block content
 												option(value='personal') Personal
 												option(value='momo') Memo
 									.form-group
-										label.col-sm-2.control-label(for='event-editor-title') Title:
+										label.col-sm-2.control-label(for='event-editor-title') Title (*):
 										.col-sm-10
 											input.form-control(type='text', required, name='title' id='event-editor-title' value='' placeholder='Title' autofocus)
 									.form-group
@@ -38,6 +38,6 @@ block content
 										label.col-sm-2.control-label(for='event-editor-url') URL:
 										.col-sm-10
 											input.form-control(type='text', name='url' id='event-editor-url' value='' placeholder='URL')
-						.modal-footer
-							button.btn.btn-default(type='button', onclick='closeEventEditor();') Close
-							button#event-save-btn.btn.btn-primary(type='button', onclick='saveFromEventEditor();') Save
+							.modal-footer
+								button.btn.btn-default(type='button', onclick='closeEventEditor();') Close
+								button#event-save-btn.btn.btn-primary(type='submit', onclick='saveFromEventEditor();') Save
