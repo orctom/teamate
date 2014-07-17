@@ -3,14 +3,41 @@ block content
 	.row
 		.col-lg-12
 			h1.page-header My Events
-			#event-editor
-				.modal-dialog.modal-sm
-					.modal-content
-						.modal-header
-							button.close(onclick='closeEventEditor();') &times;
-							h4.modal-title Title
-						.modal-body
-							p body
-						.modal-footer
-							button#event-save-btn.btn.btn-primary(type='button') Save
 			#calendar
+			#event-editor.modal
+				.modal-dialog
+					.modal-content
+						.modal-body
+							form#event-editor-form.form-horizontal(role='form')
+								fieldset
+									.form-group
+										input.form-control(type='hidden', name='id' id='event-editor-id' value='')
+										input.form-control(type='hidden', name='start' id='event-editor-start' value='')
+										input.form-control(type='hidden', name='end' id='event-editor-end' value='')
+										input.form-control(type='hidden', name='color' id='event-editor-color' value='')
+									.form-group
+										label.col-sm-2.control-label(for='event-editor-url') Category:
+										.col-sm-6
+											select.form-control(name='category' id='event-editor-category')
+												option(value='work') Work
+												option(value='personal') Personal
+												option(value='momo') Memo
+									.form-group
+										label.col-sm-2.control-label(for='event-editor-title') Title:
+										.col-sm-10
+											input.form-control(type='text', required, name='title' id='event-editor-title' value='' placeholder='Title' autofocus)
+									.form-group
+										label.col-sm-2.control-label(for='event-editor-desc') Description:
+										.col-sm-10
+											textarea.form-control(row='3', name='desc' id='event-editor-desc' value='' placeholder='Description')
+									.form-group
+										label.col-sm-2.control-label(for='event-editor-jira') JIRA#:
+										.col-sm-4
+											input.form-control(type='text', name='jira' id='event-editor-jira' value='' placeholder='JIRA number')
+									.form-group
+										label.col-sm-2.control-label(for='event-editor-url') URL:
+										.col-sm-10
+											input.form-control(type='text', name='url' id='event-editor-url' value='' placeholder='URL')
+						.modal-footer
+							button.btn.btn-default(type='button', onclick='closeEventEditor();') Close
+							button#event-save-btn.btn.btn-primary(type='button', onclick='saveFromEventEditor();') Save

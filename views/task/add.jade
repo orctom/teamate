@@ -4,14 +4,14 @@ block content
 	.row
 		.col-lg-12
 			h1.page-header 
-				a(href='/todo') Todo List
+				a(href='/task') Task List
 				|&nbsp;-&nbsp;Add
 			.panel.panel-default
-				.panel-heading Add Todo Item
+				.panel-heading Add Task Item
 				.panel-body
-					form(action='/todo/save', method='POST', role='form')
+					form(action='/task/save', method='POST', role='form')
 						fieldset
 							.form-group
 								input.form-control(type='text', required, name='content' value='' placeholder='to do...' autofocus)
-						button.btn.btn-primary.btn-lg(type='submit') Save
+						button.btn.btn-primary(type='submit') Save
 		

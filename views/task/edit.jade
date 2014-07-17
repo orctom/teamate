@@ -1,0 +1,19 @@
+extends ../layout/layout
+
+block content
+	.row
+		.col-lg-12
+			h1.page-header 
+				a(href='/task') Task List
+				|&nbsp;-&nbsp;Edit
+			.panel.panel-default
+				.panel-heading Edit Task Item
+				.panel-body
+					form(action='/task/save', method='POST', role='form')
+						fieldset
+							.form-group
+								input.form-control(type='hidden', name='_id' value='#{task._id}' )
+							.form-group
+								input.form-control(type='text', required, name='content' value='#{task.content}' placeholder='content' autofocus)
+						button.btn.btn-primary(type='submit') Save
+		

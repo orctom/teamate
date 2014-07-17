@@ -1,5 +1,6 @@
 var config = module.exports = {};
 
+config.env = 'production';
 config.port = 3000;
 config.mongodb = {
     url: 'localhost:27017/teamate'

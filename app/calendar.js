@@ -39,7 +39,8 @@ exports.events = function(db) {
         }, {
             id: 'NAECOM-1072',
             title: 'Remove empty packages in core code base',
-            start: '2014-07-15'
+            start: '2014-07-15',
+            desc: 'this is desc'
         }];
         res.json(data);
     }

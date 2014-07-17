@@ -1,14 +1,14 @@
 var API = require('./middlewares/API');
 var config = require('../config');
 var profile = require('./profile');
-var todo = require('./todo');
+var task = require('./task');
 var calendar = require('./calendar');
 var admin = require('./admin');
 
 module.exports = function(app, passport, db, logger) {
 
     //=====================   home   =======================
-    app.get('/', calendar.dashboard(db));
+    app.get('/', requireLogin, calendar.dashboard(db));
 
     //=====================   security   =======================
     app.get('/login', profile.login);
@@ -18,16 +18,20 @@ module.exports = function(app, passport, db, logger) {
     app.get('/users', requireLogin, profile.users(db));
     app.get('/groups', requireLogin, profile.groups(db));
 
-    //=====================   todo   =======================
-    app.get('/todo', requireLogin, todo.list(db));
-    app.get('/todo/add', requireLogin, todo.add);
-    app.get('/todo/edit/:id', requireLogin, todo.edit(db));
-    app.post('/todo/save', requireLogin, todo.save(db));
-    app.get('/todo/delete/:id', requireLogin, todo.delete(db));
+    //=====================   task   =======================
+    app.get('/task', requireLogin, task.list(db));
+    app.get('/task/add', requireLogin, task.add);
+    app.get('/task/edit/:id', requireLogin, task.edit(db));
+    app.post('/task/save', requireLogin, task.save(db));
+    app.get('/task/delete/:id', requireLogin, task.delete(db));
+
+    app.get('/task/categories', requireLogin, task.categories(db));
+    app.post('/task/categories/save', requireLogin, task.saveCategory(db));
+    app.get('/task/categories/delete/:id', requireLogin, task.deleteCategory(db));
 
     //=====================   calendar   =======================
-    app.get('/calendar/events.json', calendar.events(db));
-    app.post('/calendar/events', calendar.update(db));
+    app.get('/calendar/events', requireLogin, calendar.events(db));
+    app.post('/calendar/events', requireLogin, calendar.update(db));
 
     //=====================   admin (maintain groups)  =======================
     app.get('/admin/groups', requireAdmin, admin.groups);
@@ -35,6 +39,18 @@ module.exports = function(app, passport, db, logger) {
 };
 
 function requireLogin(req, res, next) {
+    if ('development' == config.env) {
+        req.user = {
+            username: config.auth.username,
+            password: config.auth.password,
+            token: config.auth.token,
+            name: 'My Lord',
+            avatarUrl: 'https://ecomsvn.officedepot.com/avatar/' + config.auth.username
+        };
+        res.locals.user = req.user;
+        return next();
+    }
+
     if (req.isAuthenticated()) {
         return next();
     } else {

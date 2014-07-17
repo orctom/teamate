@@ -301,7 +301,7 @@ table tbody tr.highlight td {
     height: 100%;
 }
 #event-editor {
-    position: absolute;
+    position: fixed;
     display: none;
-    z-index: 10000;
+    padding-top: 150px;
 }

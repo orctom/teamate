@@ -1,0 +1,84 @@
+extends ../layout/layout
+block styles
+	link(rel='stylesheet', href='/css/pick-a-color-1.2.3.min.css')
+block content
+	.row
+		.col-lg-12
+			#confirm-delete.modal.fade(tabindex='-1' role='dialog'  aria-hidden='true')
+				.modal-dialog
+					.modal-content
+						.modal-body
+							p Sure to Delete?
+						.modal-footer
+							button(data-dismiss='modal').btn.btn-default Cancel
+							a(href='#').btn.btn-danger.danger Delete
+	.row
+		.col-lg-12
+			h1.page-header Task List
+			.col-lg-9
+				table.table.table-striped.table-bordered.table-hover
+					thead
+						tr
+							th.col-lg-1 &nbsp;
+							th.col-lg-7 Task
+							th.col-lg-4 Tags
+					tbody
+						each task, i in tasks
+							tr
+								td
+									a.btn.btn-info.btn-xs(href='task/edit/#{task._id}')
+										i.glyphicon.glyphicon-edit
+									a.btn.btn-warning.btn-xs(href='#' data-href='task/delete/#{task._id}' data-toggle='modal' data-target='#confirm-delete')
+										i.glyphicon.glyphicon-remove
+								td #{task.content}
+								td dummy tags
+				.btn-group
+					a(href='task/add').btn.btn-default Add
+			.col-sm-3
+				.panel.panel-default
+					.panel-heading
+						i.fa.fa-list.fa-fw
+						| Task Categories
+					.panel-body
+						.table-responsive
+							table.table.table-striped.table-bordered.table-hover
+								thead
+									tr
+										th Category Name
+										th 
+								tbody#categories
+									tr
+										td 
+											span.color-preview(style='background-color: #0e6') &nbsp;&nbsp;&nbsp;&nbsp;
+											|&nbsp;name
+										td
+											a.btn.btn-info.btn-xs(onclick='editCategory();')
+												i.glyphicon.glyphicon-edit
+											a.btn.btn-warning.btn-xs(onclick='#' data-toggle='modal' data-target='#confirm-delete')
+												i.glyphicon.glyphicon-remove
+									tr
+										td
+											span(style='background-color: #06c') &nbsp;&nbsp;&nbsp;&nbsp;
+											|&nbsp;name2
+										td
+											a.btn.btn-info.btn-xs(onclick='editCategory();')
+												i.glyphicon.glyphicon-edit
+											a.btn.btn-warning.btn-xs(href='#' data-toggle='modal' data-target='#confirm-delete')
+												i.glyphicon.glyphicon-remove
+						form#category-form.form(action='', method='POST', role='form')
+							legend
+								fieldset
+									.form-group
+										.col-sm-12
+											input.form-control(type='text' required name='name' value='' placeholder='Category Name')
+									.form-group
+										.col-sm-12
+											input.form-control.pick-a-color(type='text' value='06c' name='color')
+									.form-group
+										.col-sm-12
+											button.btn.btn-primary.btn-sm(type='submit') Submit
+
+block scripts
+	script(src='/js/tinycolor-0.9.15.min.js')
+	script(src='/js/pick-a-color-1.2.3.min.js')
+	script(src='/js/task.js')

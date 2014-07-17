@@ -39,9 +39,11 @@ $(function() {
             saveEvent(data);
         },
         select: function(start, end, jsEvent, view) {
-            showEventEditor(jsEvent.pageX, jsEvent.pageY);
+            $('#event-editor').fadeIn();
         },
         eventClick: function(calEvent, jsEvent, view) {
+            console.log('event click: ');
+            console.dir(calEvent);
             var data = {
                 id: calEvent.id,
                 title: calEvent.title,
@@ -49,12 +51,59 @@ $(function() {
                 end: calEvent.end,
                 url: calEvent.url,
                 color: calEvent.color,
+                desc: calEvent.desc
             };
-            showEventEditor(jsEvent.pageX, jsEvent.pageY, data);
+            $('#event-editor-id').val(data.id);
+            $('#event-editor-start').val(data.start);
+            $('#event-editor-end').val(data.end);
+            $('#event-editor-title').val(data.title);
+            $('#event-editor-desc').val(data.desc);
+            $('#event-editor-url').val(data.url);
+            $('#event-editor-color').val(data.color);
+            $('#event-editor').fadeIn();
         },
-        events: '/calendar/events.json'
+        events: '/calendar/events'
+    });
+
+    $(".pick-a-color").pickAColor({
+        inlineDropdown: true,
+        showHexInput: false
     });
 });
+
+function showEventEditor(pageX, pageY, data) {
+    $('#event-editor').fadeIn();
+    $('#event-save-btn').one('click', function() {
+        $('#event-editor').fadeOut();
+        saveEvent({
+            id: 'id',
+            title: 'title',
+            start: '2014-07-15',
+            url: 'http://www.officedepot.com',
+            color: 'blue',
+        });
+    });
+}
+
+function closeEventEditor() {
+    $('#event-editor-form').trigger('reset');
+    $('#event-editor-form').find('input, textarea').val('');
+    $('#event-editor').hide();
+}
+
+function saveFromEventEditor() {
+    var data = {
+        id: $('#event-editor-id').val(),
+        start: $('#event-editor-start').val(),
+        end: $('#event-editor-end').val(),
+        title: $('#event-editor-title').val(),
+        desc: $('#event-editor-desc').val(),
+        jira: $('#event-editor-jira').val(),
+        url: $('#event-editor-url').val(),
+        color: $('#event-editor-color').val()
+    };
+    closeEventEditor();
+}
 
 function saveEvent(event) {
     console.log('save/updated event data');
@@ -81,25 +130,4 @@ function saveEvent(event) {
         console.log("error: " + e.message);
         console.dir(event);
     }
-}
-
-function showEventEditor(pageX, pageY, data) {
-    $('#event-editor').css({
-        left: pageX - 420,
-        top: pageY - 280
-    }).fadeIn();
-    $('#event-save-btn').one('click', function() {
-        $('#event-editor').fadeOut();
-        saveEvent({
-            id: 'id',
-            title: 'title',
-            start: '2014-07-15',
-            url: 'http://www.officedepot.com',
-            color: 'blue',
-        });
-    });
-}
-
-function closeEventEditor() {
-    $('#event-editor').hide();
 }
