@@ -8,7 +8,7 @@ block content
 				.modal-dialog
 					.modal-content
 						form#event-editor-form.form-horizontal(role='form')
-							.modal-header title
+							.modal-header#event-editor-header
 							.modal-body
 								fieldset
 									.form-group
@@ -41,4 +41,4 @@ block content
 											input.form-control.input-sm(type='text', name='url' id='event-editor-url' value='' placeholder='URL')
 							.modal-footer
 								button.btn.btn-default(type='button', onclick='closeEventEditor();') Close
-								button#event-save-btn.btn.btn-primary(type='submit', onclick='saveFromEventEditor();') Save
+								button#event-save-btn.btn.btn-primary(type='submit', onclick='saveFromEventEditor(event);') Save

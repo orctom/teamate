@@ -59,3 +59,7 @@ exports.update = function(db) {
         res.json('updated');
     }
 };
+
+function getTime(date) {
+    return new Date(date).getTime();
+}

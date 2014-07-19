@@ -40,6 +40,13 @@ $(function() {
         },
         select: function(start, end, jsEvent, view) {
             $('#event-editor').fadeIn();
+            $('#event-editor-start').val(start.format());
+            if (end) {
+                $('#event-editor-end').val(end.format());
+                $('#event-editor-header').html(start.format() + " - " + end.format());
+            } else {
+                $('#event-editor-header').html(start.format());
+            }
         },
         eventClick: function(calEvent, jsEvent, view) {
             console.log('event click: ');
@@ -55,13 +62,18 @@ $(function() {
                 desc: calEvent.desc
             };
             $('#event-editor-id').val(data.id);
-            $('#event-editor-start').val(data.start);
-            $('#event-editor-end').val(data.end);
+            $('#event-editor-start').val(data.start.format());
             $('#event-editor-title').val(data.title);
             $('#event-editor-desc').val(data.desc);
             $('#event-editor-jira').val(data.jira);
             $('#event-editor-url').val(data.url);
             $('#event-editor-color').val(data.color);
+            if (data.end) {
+                $('#event-editor-end').val(data.end.format());
+                $('#event-editor-header').html(data.start.format() + " - " + data.end.format());
+            } else {
+                $('#event-editor-header').html(data.start.format());
+            }
             $('#event-editor').fadeIn();
         },
         events: '/calendar/events'
@@ -75,22 +87,13 @@ $(function() {
 
 function showEventEditor(pageX, pageY, data) {
     $('#event-editor').fadeIn();
-    $('#event-save-btn').one('click', function() {
-        $('#event-editor').fadeOut();
-        saveEvent({
-            id: 'id',
-            title: 'title',
-            start: '2014-07-15',
-            url: 'http://www.officedepot.com',
-            color: 'blue',
-        });
-    });
 }
 
 function closeEventEditor() {
     $('#event-editor-form').trigger('reset');
     $('#event-editor-form').find('input, textarea').val('');
     $('#event-editor').hide();
+    $('#event-editor-header').html("");
 }
 
 function saveFromEventEditor(event) {
@@ -105,6 +108,7 @@ function saveFromEventEditor(event) {
         url: $('#event-editor-url').val(),
         color: $('#event-editor-color').val()
     };
+    saveEvent(data);
     closeEventEditor();
 }
 
