@@ -8,6 +8,7 @@ block content
 				.modal-dialog
 					.modal-content
 						form#event-editor-form.form-horizontal(role='form')
+							.modal-header title
 							.modal-body
 								fieldset
 									.form-group
@@ -18,26 +19,26 @@ block content
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-url') Category:
 										.col-sm-6
-											select.form-control(name='category' id='event-editor-category')
+											select.form-control.input-sm(name='category' id='event-editor-category')
 												option(value='work') Work
 												option(value='personal') Personal
 												option(value='momo') Memo
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-title') Title (*):
 										.col-sm-10
-											input.form-control(type='text', required, name='title' id='event-editor-title' value='' placeholder='Title' autofocus)
+											input.form-control.input-sm(type='text', required, name='title' id='event-editor-title' value='' placeholder='Title' autofocus)
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-desc') Description:
 										.col-sm-10
-											textarea.form-control(row='3', name='desc' id='event-editor-desc' value='' placeholder='Description')
+											textarea.form-control.input-sm(row='3', name='desc' id='event-editor-desc' value='' placeholder='Description')
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-jira') JIRA#:
 										.col-sm-4
-											input.form-control(type='text', name='jira' id='event-editor-jira' value='' placeholder='JIRA number')
+											input.form-control.input-sm(type='text', name='jira' id='event-editor-jira' value='' placeholder='JIRA number')
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-url') URL:
 										.col-sm-10
-											input.form-control(type='text', name='url' id='event-editor-url' value='' placeholder='URL')
+											input.form-control.input-sm(type='text', name='url' id='event-editor-url' value='' placeholder='URL')
 							.modal-footer
 								button.btn.btn-default(type='button', onclick='closeEventEditor();') Close
 								button#event-save-btn.btn.btn-primary(type='submit', onclick='saveFromEventEditor();') Save

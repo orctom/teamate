@@ -10,7 +10,7 @@ $(function() {
         editable: true,
         droppable: true,
         eventRender: function(event, element, view) {
-            var title = event.id ? "<a href='https://officedepot.atlassian.net/browse/" + event.id + "' target='_blank'>" + event.id + "</a>" : "";
+            var title = event.jira ? "<a href='https://officedepot.atlassian.net/browse/" + event.jira + "' target='_blank'>" + event.jira + "</a>" : "";
             element.qtip({
                 position: {
                     my: 'bottom center',
@@ -18,7 +18,7 @@ $(function() {
                 },
                 content: {
                     title: title,
-                    text: event.title
+                    text: event.title + '<br/>' + event.desc
                 },
                 hide: {
                     fixed: true
@@ -49,6 +49,7 @@ $(function() {
                 title: calEvent.title,
                 start: calEvent.start,
                 end: calEvent.end,
+                jira: calEvent.jira,
                 url: calEvent.url,
                 color: calEvent.color,
                 desc: calEvent.desc
@@ -58,6 +59,7 @@ $(function() {
             $('#event-editor-end').val(data.end);
             $('#event-editor-title').val(data.title);
             $('#event-editor-desc').val(data.desc);
+            $('#event-editor-jira').val(data.jira);
             $('#event-editor-url').val(data.url);
             $('#event-editor-color').val(data.color);
             $('#event-editor').fadeIn();

@@ -305,3 +305,11 @@ table tbody tr.highlight td {
     display: none;
     padding-top: 150px;
 }
+.color-box {
+    border-radius: 4px;
+    display: inline-block;
+    height: 1.3em;
+    margin-right: 5px;
+    width: 1.3em;
+    vertical-align: middle;
+}

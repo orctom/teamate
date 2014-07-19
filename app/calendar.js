@@ -37,7 +37,8 @@ exports.events = function(db) {
             title: 'Birthday Party',
             start: '2014-06-13T07:00:00'
         }, {
-            id: 'NAECOM-1072',
+            id: '2345678',
+            jira: 'NAECOM-1072',
             title: 'Remove empty packages in core code base',
             start: '2014-07-15',
             desc: 'this is desc'
