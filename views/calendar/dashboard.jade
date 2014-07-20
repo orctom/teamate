@@ -12,33 +12,30 @@ block content
 							.modal-body
 								fieldset
 									.form-group
-										input.form-control(type='hidden', name='id' id='event-editor-id' value='')
-										input.form-control(type='hidden', name='start' id='event-editor-start' value='')
-										input.form-control(type='hidden', name='end' id='event-editor-end' value='')
-										input.form-control(type='hidden', name='color' id='event-editor-color' value='')
+										input.form-control#event-editor-id(type='hidden' name='id' value='')
+										input.form-control#event-editor-start(type='hidden' name='start' value='')
+										input.form-control#event-editor-end(type='hidden' name='end' value='')
+										input.form-control#event-editor-color(type='hidden' name='color' value='')
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-url') Category:
 										.col-sm-6
-											select.form-control.input-sm(name='category' id='event-editor-category')
-												option(value='work') Work
-												option(value='personal') Personal
-												option(value='momo') Memo
+											select.form-control.input-sm#event-editor-category(name='category')
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-title') Title (*):
 										.col-sm-10
-											input.form-control.input-sm(type='text', required, name='title' id='event-editor-title' value='' placeholder='Title' autofocus)
+											input.form-control.input-sm#event-editor-title(type='text' required name='title' value='' placeholder='Title' autofocus)
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-desc') Description:
 										.col-sm-10
-											textarea.form-control.input-sm(row='3', name='desc' id='event-editor-desc' value='' placeholder='Description')
+											textarea.form-control.input-sm#event-editor-desc(row='3' name='desc' value='' placeholder='Description')
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-jira') JIRA#:
 										.col-sm-4
-											input.form-control.input-sm(type='text', name='jira' id='event-editor-jira' value='' placeholder='JIRA number')
+											input.form-control.input-sm#event-editor-jira(type='text' name='jira' value='' placeholder='JIRA number')
 									.form-group
 										label.col-sm-2.control-label(for='event-editor-url') URL:
 										.col-sm-10
-											input.form-control.input-sm(type='text', name='url' id='event-editor-url' value='' placeholder='URL')
+											input.form-control.input-sm#event-editor-url(type='text' name='url' value='' placeholder='URL')
 							.modal-footer
-								button.btn.btn-default(type='button', onclick='closeEventEditor();') Close
-								button#event-save-btn.btn.btn-primary(type='submit', onclick='saveFromEventEditor(event);') Save
+								button.btn.btn-default(type='button' onclick='closeEventEditor();') Close
+								button#event-save-btn.btn.btn-primary(type='submit' onclick='saveFromEventEditor(event);') Save

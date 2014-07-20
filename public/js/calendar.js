@@ -83,7 +83,28 @@ $(function() {
         inlineDropdown: true,
         showHexInput: false
     });
+
+    if (!$.localStorage('categories')) {
+        $.get('/task/categories', function(data) {
+            $.localStorage('categories', data);
+            renderCategoriesDropdown();
+        });
+    } else {
+        renderCategoriesDropdown();
+    }
 });
+
+function renderCategoriesDropdown() {
+    var categories = $.localStorage('categories');
+    if (categories) {
+        var $dropdown = $('#event-editor-category');
+        for (var i = 0; i < categories.length; i++) {
+            var name = categories[i].name;
+            var color = categories[i].color;
+            $dropdown.append($("<option value='" + name + "' style='background-color:#" + color + "'>" + name + "</option>"));
+        }
+    }
+}
 
 function showEventEditor(pageX, pageY, data) {
     $('#event-editor').fadeIn();

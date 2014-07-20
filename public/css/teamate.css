@@ -303,7 +303,6 @@ table tbody tr.highlight td {
 #event-editor {
     position: fixed;
     display: none;
-    padding-top: 150px;
 }
 .color-box {
     border-radius: 4px;

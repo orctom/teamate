@@ -21,6 +21,8 @@ $(function() {
 });
 
 function loadCategories(categories) {
+    $.localStorage('categories', categories);
+
     $('#categories tr').remove();
     for (var i = 0; i < categories.length; i++) {
         loadCategory(categories[i]);
