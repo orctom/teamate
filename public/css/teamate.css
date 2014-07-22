@@ -21,8 +21,7 @@ body {
 .page-title-tools {
     position: absolute;
     top: 45px;
-    left: 700px;
-    width: 100%;
+    right: 100px;
 }
 
 /* Wrappers */

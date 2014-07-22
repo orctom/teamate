@@ -31,52 +31,44 @@ $(function() {
             });
         },
         eventDrop: function(event, dayDelta, minuteDelta) {
-            console.dir(dayDelta);
-            console.dir(minuteDelta);
             var data = {
+                _id: event._id,
                 id: event.id,
+                start: event.start.format(),
                 title: event.title,
                 desc: event.desc,
                 jira: event.jira,
                 color: event.color,
                 category: event.category,
             };
-            if (typeof event.start == 'object') {
-                data.start = event.start.format();
-                if (data.end) {
-                    data.end = event.end.format();
-                }
+            if (event.end) {
+                data.end = event.end.format();
             } else {
-                data.start = event.start;
-                if (data.end) {
-                    data.end = event.end;
+                if (event.allDay) {
+                    data.allDay = true;
+                } else {
+                    data.end = new Date(event.start + 7200000).toJSON();
                 }
             }
-            saveEvent(data);
+            saveEvent(data, true);
         },
         eventResize: function(event, dayDelta, minuteDelta) {
-            console.dir(dayDelta);
-            console.dir(minuteDelta);
             var data = {
+                _id: event._id,
                 id: event.id,
+                start: event.start.format(),
                 title: event.title,
                 desc: event.desc,
                 jira: event.jira,
                 color: event.color,
                 category: event.category,
             };
-            if (typeof event.start == 'object') {
-                data.start = event.start.format();
-                if (data.end) {
-                    data.end = event.end.format();
-                }
+            if (event.end) {
+                data.end = event.end.format();
             } else {
-                data.start = event.start;
-                if (data.end) {
-                    data.end = event.end;
-                }
+                data.end = new Date(event.start + 3600000 + dayDelta).toJSON();
             }
-            saveEvent(data);
+            saveEvent(data, true);
         },
         select: function(start, end, jsEvent, view) {
             $('#event-editor').fadeIn();
@@ -168,24 +160,30 @@ saveFromEventEditor = function(event) {
     closeEventEditor();
 };
 
+reloadEvents = function() {
+    $('#calendar').fullCalendar('refetchEvents');
+};
+
 deleteEvent = function() {
     if (confirm('Sure to delete this event?')) {
         var url = '/calendar/event/delete/' + $('#event-editor-id').val();
         closeEventEditor();
         $.get(url, function() {
-            $('#calendar').fullCalendar('refetchEvents');
+            reloadEvents();
         });
     }
 };
 
-saveEvent = function(data) {
+saveEvent = function(data, skipUpdatingEvent) {
     console.log('save/updated event data');
     try {
         console.log("save: " + JSON.stringify(data));
         $.post('/calendar/events', data, function(persistedData) {
             if (data._id) {
-                $.extend(currentCalEvent, data);
-                $('#calendar').fullCalendar('updateEvent', currentCalEvent);
+                if (!skipUpdatingEvent) {
+                    $.extend(currentCalEvent, data);
+                    $('#calendar').fullCalendar('updateEvent', currentCalEvent);
+                }
             } else {
                 $('#calendar').fullCalendar('renderEvent', persistedData);
             }
