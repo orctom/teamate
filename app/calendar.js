@@ -56,6 +56,27 @@ exports.update = function(db) {
     }
 };
 
+exports.deleteEvent = function(db) {
+    return function(req, res) {
+        var event = db.get('event');
+        var id = req.params.id;
+        if (id) {
+            event.remove({
+                _id: id
+            }, function(error, data) {
+                res.json({
+                    success: true
+                });
+            });
+        } else {
+            res.json({
+                success: false,
+                message: 'Invalid request, "_id" expected.'
+            });
+        }
+    }
+};
+
 getDate = function(date) {
     return new Date(date);
 }

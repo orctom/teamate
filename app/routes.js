@@ -27,11 +27,12 @@ module.exports = function(app, passport, db, logger) {
 
     app.get('/task/categories', requireLogin, task.categories(db));
     app.post('/task/categories/save', requireLogin, task.saveCategory(db));
-    app.get('/task/categories/delete/:id', requireLogin, task.deleteCategory(db));
+    app.get('/task/category/delete/:id', requireLogin, task.deleteCategory(db));
 
     //=====================   calendar   =======================
     app.get('/calendar/events', requireLogin, calendar.events(db));
     app.post('/calendar/events', requireLogin, calendar.update(db));
+    app.get('/calendar/event/delete/:id', requireLogin, calendar.deleteEvent(db));
 
     //=====================   admin (maintain groups)  =======================
     app.get('/admin/groups', requireAdmin, admin.groups);

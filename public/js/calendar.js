@@ -107,6 +107,7 @@ $(function() {
                 $('#event-editor-header').html(data.start);
             }
             $('#event-editor-form').populateJson(data);
+            $('#event-editor-category-color').css('background-color', data.color);
             $('#event-editor').fadeIn();
             currentCalEvent = calEvent;
         },
@@ -140,7 +141,7 @@ setupCategoryOnChangeHandler = function() {
         $('#event-editor-category-color').css('background-color', selectedColor);
         $('#event-editor-color').val(selectedColor);
     });
-}
+};
 
 renderCategoriesDropdown = function() {
     var categories = $.localStorage('categories');
@@ -151,21 +152,31 @@ renderCategoriesDropdown = function() {
             $dropdown.append($("<option value='" + name + "' color='" + color + "'>" + name + "</option>"));
         }
     }
-}
+};
 
 closeEventEditor = function() {
     $('#event-editor-form').trigger('reset');
     $('#event-editor-form').find('input, textarea').val('');
     $('#event-editor').hide();
     $('#event-editor-header').html("");
-}
+};
 
 saveFromEventEditor = function(event) {
     event.preventDefault();
     var data = $('#event-editor-form').serializeObject();
     saveEvent(data);
     closeEventEditor();
-}
+};
+
+deleteEvent = function() {
+    if (confirm('Sure to delete this event?')) {
+        var url = '/calendar/event/delete/' + $('#event-editor-id').val();
+        closeEventEditor();
+        $.get(url, function() {
+            $('#calendar').fullCalendar('refetchEvents');
+        });
+    }
+};
 
 saveEvent = function(data) {
     console.log('save/updated event data');
@@ -184,4 +195,4 @@ saveEvent = function(data) {
         console.log("error: " + e.message);
         console.dir(event);
     }
-}
+};
