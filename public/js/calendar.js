@@ -1,3 +1,5 @@
+var currentCalEvent;
+
 $(function() {
     $('#calendar').fullCalendar({
         header: {
@@ -28,14 +30,52 @@ $(function() {
                 }
             });
         },
-        eventDrop: function(data, dayDelta, minuteDelta) {
+        eventDrop: function(event, dayDelta, minuteDelta) {
             console.dir(dayDelta);
             console.dir(minuteDelta);
+            var data = {
+                id: event.id,
+                title: event.title,
+                desc: event.desc,
+                jira: event.jira,
+                color: event.color,
+                category: event.category,
+            };
+            if (typeof event.start == 'object') {
+                data.start = event.start.format();
+                if (data.end) {
+                    data.end = event.end.format();
+                }
+            } else {
+                data.start = event.start;
+                if (data.end) {
+                    data.end = event.end;
+                }
+            }
             saveEvent(data);
         },
-        eventResize: function(data, dayDelta, minuteDelta) {
+        eventResize: function(event, dayDelta, minuteDelta) {
             console.dir(dayDelta);
             console.dir(minuteDelta);
+            var data = {
+                id: event.id,
+                title: event.title,
+                desc: event.desc,
+                jira: event.jira,
+                color: event.color,
+                category: event.category,
+            };
+            if (typeof event.start == 'object') {
+                data.start = event.start.format();
+                if (data.end) {
+                    data.end = event.end.format();
+                }
+            } else {
+                data.start = event.start;
+                if (data.end) {
+                    data.end = event.end;
+                }
+            }
             saveEvent(data);
         },
         select: function(start, end, jsEvent, view) {
@@ -49,39 +89,32 @@ $(function() {
             }
         },
         eventClick: function(calEvent, jsEvent, view) {
-            console.log('event click: ');
-            console.dir(calEvent);
             var data = {
+                _id: calEvent._id,
                 id: calEvent.id,
                 title: calEvent.title,
-                start: calEvent.start,
-                end: calEvent.end,
+                start: calEvent.start.format(),
+                end: '',
                 jira: calEvent.jira,
-                url: calEvent.url,
+                category: calEvent.category,
                 color: calEvent.color,
                 desc: calEvent.desc
             };
-            $('#event-editor-id').val(data.id);
-            $('#event-editor-start').val(data.start.format());
-            $('#event-editor-title').val(data.title);
-            $('#event-editor-desc').val(data.desc);
-            $('#event-editor-jira').val(data.jira);
-            $('#event-editor-url').val(data.url);
-            $('#event-editor-color').val(data.color);
-            if (data.end) {
-                $('#event-editor-end').val(data.end.format());
-                $('#event-editor-header').html(data.start.format() + " - " + data.end.format());
+            if (calEvent.end) {
+                data.end = calEvent.end.format();
+                $('#event-editor-header').html(data.start + " - " + data.end);
             } else {
-                $('#event-editor-header').html(data.start.format());
+                $('#event-editor-header').html(data.start);
             }
+            $('#event-editor-form').populateJson(data);
             $('#event-editor').fadeIn();
+            currentCalEvent = calEvent;
         },
         events: '/calendar/events'
     });
 
     $(".pick-a-color").pickAColor({
-        inlineDropdown: true,
-        showHexInput: false
+        inlineDropdown: true
     });
 
     if (!$.localStorage('categories')) {
@@ -92,68 +125,61 @@ $(function() {
     } else {
         renderCategoriesDropdown();
     }
+
+    setupCategoryOnChangeHandler();
 });
 
-function renderCategoriesDropdown() {
+setupCategoryOnChangeHandler = function() {
+    var selectedColor = '#' + $('#event-editor-category option:selected').attr('color');
+    $('#event-editor-category-color').css('background-color', selectedColor);
+    $('#event-editor-color').val(selectedColor);
+
+    $('#event-editor-category').on('change', function(event) {
+        var $option = $("option:selected", this);
+        selectedColor = '#' + $option.attr('color');
+        $('#event-editor-category-color').css('background-color', selectedColor);
+        $('#event-editor-color').val(selectedColor);
+    });
+}
+
+renderCategoriesDropdown = function() {
     var categories = $.localStorage('categories');
     if (categories) {
         var $dropdown = $('#event-editor-category');
-        for (var i = 0; i < categories.length; i++) {
-            var name = categories[i].name;
-            var color = categories[i].color;
-            $dropdown.append($("<option value='" + name + "' style='background-color:#" + color + "'>" + name + "</option>"));
+        for (var name in categories) {
+            var color = categories[name];
+            $dropdown.append($("<option value='" + name + "' color='" + color + "'>" + name + "</option>"));
         }
     }
 }
 
-function showEventEditor(pageX, pageY, data) {
-    $('#event-editor').fadeIn();
-}
-
-function closeEventEditor() {
+closeEventEditor = function() {
     $('#event-editor-form').trigger('reset');
     $('#event-editor-form').find('input, textarea').val('');
     $('#event-editor').hide();
     $('#event-editor-header').html("");
 }
 
-function saveFromEventEditor(event) {
+saveFromEventEditor = function(event) {
     event.preventDefault();
-    var data = {
-        id: $('#event-editor-id').val(),
-        start: $('#event-editor-start').val(),
-        end: $('#event-editor-end').val(),
-        title: $('#event-editor-title').val(),
-        desc: $('#event-editor-desc').val(),
-        jira: $('#event-editor-jira').val(),
-        url: $('#event-editor-url').val(),
-        color: $('#event-editor-color').val()
-    };
+    var data = $('#event-editor-form').serializeObject();
     saveEvent(data);
     closeEventEditor();
 }
 
-function saveEvent(event) {
+saveEvent = function(data) {
     console.log('save/updated event data');
     try {
-        var data = {
-            id: event.id,
-            title: event.title,
-            url: event.url,
-            color: event.color,
-        };
-        if (typeof event.start == 'object') {
-            data.start = event.start.format();
-        } else {
-            data.start = event.start;
-        }
-        if (data.end) {
-            data.end = event.end.format();
-        }
         console.log("save: " + JSON.stringify(data));
-        $.post('/calendar/events', data);
-        $('#calendar').fullCalendar('renderEvent', data, true);
-        $('#calendar').fullCalendar('unselect');
+        $.post('/calendar/events', data, function(persistedData) {
+            if (data._id) {
+                $.extend(currentCalEvent, data);
+                $('#calendar').fullCalendar('updateEvent', currentCalEvent);
+            } else {
+                $('#calendar').fullCalendar('renderEvent', persistedData);
+            }
+            $('#calendar').fullCalendar('unselect');
+        });
     } catch (e) {
         console.log("error: " + e.message);
         console.dir(event);

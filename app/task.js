@@ -69,16 +69,16 @@ exports.delete = function(db) {
 
 exports.categories = function(db) {
     return function(req, res) {
-        var categories = db.get('categories');
-        categories.find({}, {}, function(error, data) {
-            res.json(data);
+        var category = db.get('category');
+        category.find({}, {}, function(error, data) {
+            res.json(toMap(data));
         });
     };
 };
 
 exports.saveCategory = function(db) {
     return function(req, res) {
-        var categories = db.get('categories');
+        var category = db.get('category');
         var id = req.body._id;
         var data = {
             name: req.body.name,
@@ -86,17 +86,17 @@ exports.saveCategory = function(db) {
         };
         console.log('save category: ' + JSON.stringify(data));
         if (id) {
-            categories.update({
+            category.update({
                 _id: id
             }, data, function(error) {
-                categories.find({}, {}, function(error, cats) {
-                    res.json(cats);
+                category.find({}, {}, function(error, cats) {
+                    res.json(toMap(cats));
                 });
             });
         } else {
-            categories.insert(data, function(error) {
-                categories.find({}, {}, function(error, cats) {
-                    res.json(cats);
+            category.insert(data, function(error) {
+                category.find({}, {}, function(error, cats) {
+                    res.json(toMap(cats));
                 });
             });
         }
@@ -105,10 +105,10 @@ exports.saveCategory = function(db) {
 
 exports.deleteCategory = function(db) {
     return function(req, res) {
-        var categories = db.get('categories');
+        var category = db.get('category');
         var id = req.params.id;
         if (id) {
-            categories.remove({
+            category.remove({
                 _id: id
             }, function(error, data) {
                 res.json({
@@ -122,4 +122,13 @@ exports.deleteCategory = function(db) {
             });
         }
     }
+};
+
+toMap = function(categories) {
+    var data = {};
+    for (var i = 0; i < categories.length; i++) {
+        var category = categories[i];
+        data[category.name] = category.color;
+    }
+    return data;
 };
