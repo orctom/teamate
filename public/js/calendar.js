@@ -13,6 +13,10 @@ $(function() {
         droppable: true,
         eventRender: function(event, element, view) {
             var title = event.jira ? "<a href='https://officedepot.atlassian.net/browse/" + event.jira + "' target='_blank'>" + event.jira + "</a>" : "";
+            var content = event.title;
+            if (event.desc) {
+                content += '<br/>' + event.desc;
+            }
             element.qtip({
                 position: {
                     my: 'bottom center',
@@ -20,7 +24,7 @@ $(function() {
                 },
                 content: {
                     title: title,
-                    text: event.title + '<br/>' + event.desc
+                    text: content
                 },
                 hide: {
                     fixed: true
