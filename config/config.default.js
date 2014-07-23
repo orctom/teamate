@@ -8,8 +8,11 @@ config.mongodb = {
 config.session = {
     secret: 'hdgfhasgfhasdhfjhj234h2uiorh'
 };
-config.privilege = {
-    'hao.chen2': 'admin'
+config.admins = {
+    'hao.chen2': true
+};
+config.managers = {
+    'hao.chen2': true
 };
 config.scheduler = {
     enabled: true

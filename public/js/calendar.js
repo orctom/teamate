@@ -39,7 +39,9 @@ $(function() {
                 desc: event.desc,
                 jira: event.jira,
                 color: event.color,
+                textColor: calEvent.textColor,
                 category: event.category,
+                user: event.user
             };
             if (event.end) {
                 data.end = event.end.format();
@@ -61,7 +63,9 @@ $(function() {
                 desc: event.desc,
                 jira: event.jira,
                 color: event.color,
+                textColor: calEvent.textColor,
                 category: event.category,
+                user: event.user
             };
             if (event.end) {
                 data.end = event.end.format();
@@ -90,7 +94,9 @@ $(function() {
                 jira: calEvent.jira,
                 category: calEvent.category,
                 color: calEvent.color,
-                desc: calEvent.desc
+                textColor: calEvent.textColor,
+                desc: calEvent.desc,
+                user: calEvent.user
             };
             if (calEvent.end) {
                 data.end = calEvent.end.format();
@@ -126,12 +132,14 @@ setupCategoryOnChangeHandler = function() {
     var selectedColor = '#' + $('#event-editor-category option:selected').attr('color');
     $('#event-editor-category-color').css('background-color', selectedColor);
     $('#event-editor-color').val(selectedColor);
+    $('#event-editor-textColor').val(getTextColor(selectedColor));
 
     $('#event-editor-category').on('change', function(event) {
         var $option = $("option:selected", this);
         selectedColor = '#' + $option.attr('color');
         $('#event-editor-category-color').css('background-color', selectedColor);
         $('#event-editor-color').val(selectedColor);
+        $('#event-editor-textColor').val(getTextColor(selectedColor));
     });
 };
 
@@ -175,9 +183,7 @@ deleteEvent = function() {
 };
 
 saveEvent = function(data, skipUpdatingEvent) {
-    console.log('save/updated event data');
     try {
-        console.log("save: " + JSON.stringify(data));
         $.post('/calendar/events', data, function(persistedData) {
             if (data._id) {
                 if (!skipUpdatingEvent) {
@@ -191,6 +197,27 @@ saveEvent = function(data, skipUpdatingEvent) {
         });
     } catch (e) {
         console.log("error: " + e.message);
-        console.dir(event);
+        console.dir(data);
+    }
+};
+
+getTextColor = function(bgColor) {
+    return isDark(bgColor) ? '#FFF' : '#000';
+};
+
+isDark = function(color) {
+    try {
+        var hex = color.replace(/[^0-9a-z]/gi, '');
+        if (3 == hex.length) {
+            var sum = parseInt(hex[0], 16) + parseInt(hex[1], 16) + parseInt(hex[2], 16);
+            return sum < 3 * 128 / 2;
+        } else if (6 == hex.length) {
+            var sum = parseInt(hex[0] + hex[1], 16) + parseInt(hex[2] + hex[3], 16) + parseInt(hex[4] + hex[5], 16);
+            return sum < 3 * 256 / 2;
+        } else {
+            return true;
+        }
+    } catch (e) {
+        return true;
     }
 };

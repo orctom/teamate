@@ -26,6 +26,12 @@ exports.events = function(db) {
 
 exports.update = function(db) {
     return function(req, res) {
+        if (!req.user.isManager && req.user.username != req.body.user) {
+            res.json({
+                success: false,
+                message: 'not permited!'
+            });
+        }
         var event = db.get('event');
         var id = req.body._id;
         var data = {
@@ -36,7 +42,9 @@ exports.update = function(db) {
             desc: req.body.desc,
             jira: req.body.jira,
             color: req.body.color,
-            category: req.body.category
+            textColor: req.body.textColor,
+            category: req.body.category,
+            user: req.body.user
         };
         data.startDate = getDate(data.start);
         data.endDate = data.end ? getDate(data.end) : getDate(data.startDate.getTime() + 86400000);

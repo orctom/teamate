@@ -1,3 +1,4 @@
+var config = require('./index');
 var LocalStrategy = require('passport-local').Strategy;
 var API = require('../app/middlewares/API');
 
@@ -20,6 +21,9 @@ module.exports = function(passport) {
                         console.log('passport return user   : ' + user);
                         return done(null, false, error);
                     } else {
+                        if (config.managers[username]) {
+                            user.isManager = true;
+                        }
                         return done(null, user);
                     }
                 });

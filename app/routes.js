@@ -46,6 +46,7 @@ function requireLogin(req, res, next) {
             password: config.auth.password,
             token: config.auth.token,
             name: 'My Lord',
+            isManager: true,
             avatarUrl: 'https://ecomsvn.officedepot.com/avatar/' + config.auth.username
         };
         res.locals.user = req.user;
@@ -61,9 +62,21 @@ function requireLogin(req, res, next) {
 
 function requireAdmin(req, res, next) {
     if (req.isAuthenticated()) {
-        var privilege = config.privilege;
-        var role = privilege[req.user.username];
-        if ('admin' == role) {
+        var admins = config.admins;
+        if (admins[req.user.username]) {
+            return next();
+        } else {
+            res.redirect('/403');
+        }
+    } else {
+        res.redirect('/login');
+    }
+}
+
+function requireManager(req, res, next) {
+    if (req.isAuthenticated()) {
+        var managers = config.managers;
+        if (managers[req.user.username]) {
             return next();
         } else {
             res.redirect('/403');
