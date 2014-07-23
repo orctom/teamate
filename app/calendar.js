@@ -17,7 +17,8 @@ exports.events = function(db) {
             },
             endDate: {
                 '$gte': startDate
-            }
+            },
+            user: req.user.username
         }, {}, function(error, data) {
             res.json(data);
         });
@@ -46,6 +47,12 @@ exports.update = function(db) {
             category: req.body.category,
             user: req.body.user
         };
+
+        // set user to current user if user is not set
+        if (!data.user) {
+            data.user = req.user.username;
+        }
+
         data.startDate = getDate(data.start);
         data.endDate = data.end ? getDate(data.end) : getDate(data.startDate.getTime() + 86400000);
         if (id) {
