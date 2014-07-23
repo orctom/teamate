@@ -152,7 +152,7 @@ renderCategoriesDropdown = function() {
     if (categories) {
         var $dropdown = $('#event-editor-category');
         for (var name in categories) {
-            var color = categories[name];
+            var color = categories[name].color;
             $dropdown.append($("<option value='" + name + "' color='" + color + "'>" + name + "</option>"));
         }
     }

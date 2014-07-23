@@ -23,7 +23,7 @@ block content
 							th.col-lg-7 Task
 							th.col-lg-4 Tags
 					tbody
-						if tests
+						if tasks
 							each task, i in tasks
 								tr
 									td
@@ -54,6 +54,8 @@ block content
 									.form-group
 										.col-sm-12
 											input.form-control(type='text' required name='name' value='' placeholder='Category Name')
+											input.form-control(type='hidden' name='_id' value='')
+											input.form-control(type='hidden' name='user' value='#{user.username}')
 									.form-group
 										.col-sm-12
 											input.form-control.pick-a-color(type='text' value='06c' name='color')

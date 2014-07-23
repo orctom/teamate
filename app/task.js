@@ -111,8 +111,8 @@ exports.deleteCategory = function(db) {
             category.remove({
                 _id: id
             }, function(error, data) {
-                res.json({
-                    success: true
+                category.find({}, {}, function(error, cats) {
+                    res.json(toMap(cats));
                 });
             });
         } else {
@@ -128,7 +128,7 @@ toMap = function(categories) {
     var data = {};
     for (var i = 0; i < categories.length; i++) {
         var category = categories[i];
-        data[category.name] = category.color;
+        data[category.name] = category;
     }
     return data;
 };
