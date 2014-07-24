@@ -1,0 +1,18 @@
+extends ../layout/layout
+block content
+	.row
+		.col-lg-12
+			h1.page-header Users
+			.col-lg-9
+				table.table.table-striped.table-bordered.table-hover
+					thead
+						tr
+							th.col-lg-1 Name
+							th.col-lg-7 avatarUrl
+					tbody
+						if users
+							each user, i in users
+								tr
+									td #{user.name}
+									td
+										img(src='#{user.avatarUrl}?s=24')
