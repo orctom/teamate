@@ -3,6 +3,8 @@ var config = require('../config');
 var profile = require('./profile');
 var task = require('./task');
 var calendar = require('./calendar');
+var activity = require('./activity');
+var user = require('./user');
 var admin = require('./admin');
 
 module.exports = function(app, passport, db, logger) {
@@ -15,8 +17,6 @@ module.exports = function(app, passport, db, logger) {
     app.post('/login', profile.doLogin(passport));
     app.get('/logout', profile.logout);
     app.get('/profile', requireLogin, profile.showProfile);
-    app.get('/users', requireLogin, profile.users(db));
-    app.get('/groups', requireLogin, profile.groups(db));
 
     //=====================   task   =======================
     app.get('/task', requireLogin, task.list(db));
@@ -33,6 +33,15 @@ module.exports = function(app, passport, db, logger) {
     app.get('/calendar/events', requireLogin, calendar.events(db));
     app.post('/calendar/events', requireLogin, calendar.update(db));
     app.get('/calendar/event/delete/:id', requireLogin, calendar.deleteEvent(db));
+
+    //=====================   activity   =======================
+    app.get('/activities', requireLogin, activity.dashboard(db));
+    app.get('/activities/events/:username', requireLogin, activity.events(db));
+    app.get('/activities/changes/:username', requireLogin, activity.changes(db));
+
+    //=====================   user / team   =======================
+    app.get('/users', requireLogin, user.users(db));
+    app.get('/groups', requireLogin, user.groups(db));
 
     //=====================   admin (maintain groups)  =======================
     app.get('/admin/groups', requireAdmin, admin.groups);

@@ -43,10 +43,14 @@ module.exports = function(config, schedule, logger) {
                         username: data.username
                     }, function(error, exist) {
                         if (error) {
-                            console.log("" + error);
+                            console.log("find user: " + error);
                         }
-                        if (!error && exist) {
-
+                        if (!exists || exists.length < 1) {
+                            api.profile(data.username, config.auth.token, function(error, profile) {
+                                if (profile) {
+                                    user.insert(profile);
+                                }
+                            });
                         }
                     });
                 }, new Date(lastActivityDate).getTime());

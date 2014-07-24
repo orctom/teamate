@@ -27,25 +27,3 @@ exports.logout = function(req, res) {
     req.logout();
     res.redirect('/');
 };
-
-exports.users = function(db) {
-    return function(req, res) {
-        var user = db.get('user');
-        user.find({}, {}, function(error, data) {
-            res.render('users', {
-                "users": data
-            });
-        });
-    }
-};
-
-exports.groups = function(db) {
-    return function(req, res) {
-        var group = db.get('group');
-        group.find({}, {}, function(error, data) {
-            res.render('groups', {
-                "groups": data
-            });
-        });
-    }
-};
