@@ -41,7 +41,7 @@ module.exports = function(config, schedule, logger) {
 
                     user.find({
                         username: data.username
-                    }, function(error, exist) {
+                    }, function(error, exists) {
                         if (error) {
                             console.log("find user: " + error);
                         }

@@ -1,18 +1,44 @@
 extends ../layout/layout
 block content
 	.row
-		.col-lg-12
+		.col-sm-12
 			h1.page-header Users
-			.col-lg-9
+			.col-sm-3
 				table.table.table-striped.table-bordered.table-hover
 					thead
 						tr
-							th.col-lg-1 Name
-							th.col-lg-7 avatarUrl
+							th.col-sm-3 User not groupped
 					tbody
 						if users
 							each user, i in users
 								tr
-									td #{user.name}
 									td
 										img(src='#{user.avatarUrl}?s=24')
+										|#{user.name}
+			.col-sm-9
+				.panel.panel-default
+					.panel-heading
+						i.fa.fa-users.fa-fw
+						span PPP
+					.panel-body
+						| teams for each
+				a.btn.btn-primary(data-toggle='modal', href='#teamModal') Add Team
+				#teamModal.modal.fade
+					.modal-dialog
+						.modal-content
+							.modal-header
+								button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+								h4.modal-title Add / Edit Team
+							.modal-body
+								form#team-form.form(action='', method='POST', role='form')
+									fieldset
+									.form-group
+										.col-sm-12
+											input.form-control(type='text' required name='team' value='' placeholder='Team Name')
+							.modal-footer
+								button.btn.btn-default(type='button', data-dismiss='modal') Close
+								button.btn.btn-primary(type='submit') Save
+
+block scripts
+	script(src='/js/jquery/jquery-ui.custom.min.js')
+	script(src='/js/teamate/user.js')
