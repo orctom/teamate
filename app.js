@@ -7,6 +7,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
 
+var browserify = require('browserify-middleware');
+
 var monk = require('monk');
 var db = monk(config.mongodb.url);
 
@@ -27,7 +29,18 @@ app.configure(function() {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded());
     app.use(cookieParser());
+
+
     app.use(express.static(path.join(__dirname, 'public')));
+
+    // js
+    //var shared = ['./modules/common.js'];
+    //app.use('/js', browserify('./modules', {
+    //    external: shared,
+    //    transform: ['jadeify']
+    //}));
+    //app.get('/js/common.js', browserify(shared));
+
 
     app.use(express.session({
         secret: config.session.secret,
@@ -52,8 +65,10 @@ require('./config/passport')(passport);
 /// error handlers
 require('./config/error-handler')(app);
 
+
 // routes
 require('./app/routes.js')(app, passport, db, config, logger);
+
 
 app.configure('development', function() {
     app.use(express.errorHandler());

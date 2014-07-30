@@ -32,8 +32,8 @@ $(function() {
                 }
             });
         },
-        //events: '/activities/events/huawei.zhu'
-        events: '/activities/changes/patrick.wunier'
+        events: '/activities/events/nick.patel'
+        //events: '/activities/changes/patrick.wunier'
     });
 
     $(".pick-a-color").pickAColor({
