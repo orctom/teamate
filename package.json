@@ -1,13 +1,11 @@
 {
     "name": "teamate",
-    "description": "team mate monitor team task' status",
+    "description": "team mate monitor team tasks' status",
     "version": "1.0.0",
     "private": true,
     "scripts": {
         "start": "node app.js",
-        "dev": "npm run watch & nodemon app.js",
-        "build": "browserify -t brfs -t uglifyify modules/browser.js -o public/js/teamate/bundle.js",
-        "watch": "watchify -t brfs -t uglifyify modules/browser.js -o public/js/teamate/bundle.js -d -v"
+        "dev": "nodemon app.js"
     },
     "dependencies": {
         "express": "~3.4.8",
@@ -27,7 +25,7 @@
         "winston": "~0.7.3",
         "connect-flash": "~0.1.1",
         "underscore": "~1.6.0",
-        "browserify-middleware": "~2.8.0",
+        "browserify-middleware": "~2.4.0",
         "jadeify": "~2.5.0",
         "jquery": "~1.11.1",
         "jquery-ui": "~1.10.5",
@@ -39,6 +37,6 @@
     "devDependencies": {
         "brfs": "~1.2.0",
         "uglifyify": "~2.5.0",
-        "browserify": "~5.9.1"
+        "browserify": "~5.10.0"
     }
 }

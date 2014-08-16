@@ -30,17 +30,12 @@ app.configure(function() {
     app.use(bodyParser.urlencoded());
     app.use(cookieParser());
 
+    // teamate js
+    app.use('/js', browserify('./modules', {
+        transform: ['jadeify']
+    }));
 
     app.use(express.static(path.join(__dirname, 'public')));
-
-    // js
-    //var shared = ['./modules/common.js'];
-    //app.use('/js', browserify('./modules', {
-    //    external: shared,
-    //    transform: ['jadeify']
-    //}));
-    //app.get('/js/common.js', browserify(shared));
-
 
     app.use(express.session({
         secret: config.session.secret,
