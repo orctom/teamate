@@ -32,18 +32,27 @@ $('#team-form').on('submit', function(event) {
     $('#teamModal').modal('hide');
 });
 
+/**
+ * team modal on show handler: populate data for edit
+ */
 $('#teamModal').on('show.bs.modal', function(e) {
+    var $modal = $(this);
     var $target = $(e.relatedTarget);
     var _id = $target.data('id');
     var name = $target.data('name');
 
-    //populate the textbox
     if (_id) {
         $('#team-form-id').val(_id);
+        $modal.find('.modal-title').html('Edit Team');
+    } else {
+        $modal.find('.modal-title').html('Add Team');
     }
     $('#team-form-name').val(name);
 });
 
+/**
+ * delete confirm modal show handler: delete team
+ */
 $('#confirm-delete').on('show.bs.modal', function(e) {
     var $modal = $(this);
     var $target = $(e.relatedTarget);
