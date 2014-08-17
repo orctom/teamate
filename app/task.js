@@ -6,7 +6,7 @@ exports.list = function(db) {
                 "tasks": data
             });
         });
-    }
+    };
 };
 
 exports.add = function(req, res) {
@@ -22,7 +22,7 @@ exports.edit = function(db) {
                 "task": data
             });
         });
-    }
+    };
 };
 
 exports.save = function(db) {
@@ -44,7 +44,7 @@ exports.save = function(db) {
                 res.redirect('/task');
             });
         }
-    }
+    };
 };
 
 exports.delete = function(db) {
@@ -62,7 +62,7 @@ exports.delete = function(db) {
                 message: 'Invalid request, "_id" expected.'
             });
         }
-    }
+    };
 };
 
 //============  category  ===============
@@ -100,7 +100,7 @@ exports.saveCategory = function(db) {
                 });
             });
         }
-    }
+    };
 };
 
 exports.deleteCategory = function(db) {
@@ -121,7 +121,7 @@ exports.deleteCategory = function(db) {
                 message: 'Invalid request, "_id" expected.'
             });
         }
-    }
+    };
 };
 
 toMap = function(categories) {

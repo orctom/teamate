@@ -8,6 +8,16 @@ html
 				include nav
 			#page-wrapper
 				block content
+				.row
+					.col-lg-12
+						#confirm-delete.modal.fade(tabindex='-1' role='dialog'  aria-hidden='true')
+							.modal-dialog
+								.modal-content
+									.modal-body
+										p Sure to Delete?
+									.modal-footer
+										button(data-dismiss='modal').btn.btn-default Cancel
+										a(href='#').btn.btn-danger.danger Delete
 
 			include footer
 		script(src='/js/jquery/jquery-1.11.0.min.js')

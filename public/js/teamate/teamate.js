@@ -1,14 +1,25 @@
-$(function() {
-    $('#side-menu').metisMenu({
-        toggle: false
-    });
-    $('#servers').metisMenu({
-        toggle: false
-    });
+$('#side-menu').metisMenu({
+    toggle: false
+});
+$('#servers').metisMenu({
+    toggle: false
+});
 
-    $('table').on('click', 'tbody tr', function(event) {
-        $(this).addClass('highlight').siblings().removeClass('highlight');
-    });
+$('table').on('click', 'tbody tr', function(event) {
+    $(this).addClass('highlight').siblings().removeClass('highlight');
+});
+
+$('#confirm-delete').on('show.bs.modal', function(e) {
+    var $target = $(e.relatedTarget);
+    var $modal = $(this);
+    if ($target.data('href')) {
+        $modal.find('.danger').attr('href', $target.data('href'));
+    } else if ($target.data('onclick')) {
+        $modal.find('.danger').bind('click', function() {
+            $modal.modal('hide');
+        });
+        $modal.find('.danger').attr('onclick', $target.data('onclick'));
+    }
 });
 
 (function($) {

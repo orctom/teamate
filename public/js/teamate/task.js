@@ -2,17 +2,6 @@ $(function() {
     $(".pick-a-color").pickAColor({
         inlineDropdown: true
     });
-    $('#confirm-delete').on('show.bs.modal', function(e) {
-        var $modal = $(this);
-        if ($(e.relatedTarget).data('href')) {
-            $modal.find('.danger').attr('href', $(e.relatedTarget).data('href'));
-        } else if ($(e.relatedTarget).data('onclick')) {
-            $modal.find('.danger').bind('click', function() {
-                $modal.modal('hide');
-            });
-            $modal.find('.danger').attr('onclick', $(e.relatedTarget).data('onclick'));
-        }
-    });
     $('#category-form').on('submit', function(event) {
         event.preventDefault();
         $.post('/task/categories/save', $(this).serialize(), function(data) {

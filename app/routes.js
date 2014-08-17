@@ -5,7 +5,6 @@ var task = require('./task');
 var calendar = require('./calendar');
 var activity = require('./activity');
 var user = require('./user');
-var admin = require('./admin');
 
 module.exports = function(app, passport, db, logger) {
 
@@ -41,11 +40,13 @@ module.exports = function(app, passport, db, logger) {
 
     //=====================   user / team   =======================
     app.get('/users', requireLogin, user.users(db));
-    app.get('/groups', requireLogin, user.groups(db));
+    app.get('/teams', requireLogin, user.teams(db));
+    app.post('/team/save', requireLogin, user.saveTeam(db));
+    app.post('/team/delete/:id', requireLogin, user.deleteTeam(db));
 
-    //=====================   admin (maintain groups)  =======================
-    app.get('/admin/groups', requireAdmin, admin.groups);
-    app.get('/admin/group/:groupId/users', requireAdmin, admin.usersOfGroup);
+    //=====================   admin (maintain teams)  =======================
+    app.get('/admin/teams', requireAdmin, user.teams);
+    app.get('/admin/team/:id/users', requireAdmin, user.usersOfTeam);
 };
 
 function requireLogin(req, res, next) {

@@ -1,7 +1,7 @@
 exports.dashboard = function(db) {
     return function(req, res) {
         res.render('calendar/dashboard');
-    }
+    };
 };
 
 exports.events = function(db) {
@@ -22,7 +22,7 @@ exports.events = function(db) {
         }, {}, function(error, data) {
             res.json(data);
         });
-    }
+    };
 };
 
 exports.update = function(db) {
@@ -68,7 +68,7 @@ exports.update = function(db) {
                 res.json(doc);
             });
         }
-    }
+    };
 };
 
 exports.deleteEvent = function(db) {
@@ -89,9 +89,9 @@ exports.deleteEvent = function(db) {
                 message: 'Invalid request, "_id" expected.'
             });
         }
-    }
+    };
 };
 
 getDate = function(date) {
     return new Date(date);
-}
+};

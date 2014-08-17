@@ -16,28 +16,24 @@ block content
 										img(src='#{user.avatarUrl}?s=24')
 										|#{user.name}
 			.col-sm-9
-				.panel.panel-default
-					.panel-heading
-						i.fa.fa-users.fa-fw
-						span PPP
-					.panel-body
-						| teams for each
-				a.btn.btn-primary(data-toggle='modal', href='#teamModal') Add Team
-				#teamModal.modal.fade
-					.modal-dialog
-						.modal-content
-							.modal-header
-								button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
-								h4.modal-title Add / Edit Team
-							.modal-body
+				#teamContainer
+				div
+					a.btn.btn-primary(data-toggle='modal', data-target='#teamModal') Add Team
+					#teamModal.modal.fade
+						.modal-dialog
+							.modal-content
 								form#team-form.form(action='', method='POST', role='form')
-									fieldset
-									.form-group
-										.col-sm-12
-											input.form-control(type='text' required name='team' value='' placeholder='Team Name')
-							.modal-footer
-								button.btn.btn-default(type='button', data-dismiss='modal') Close
-								button.btn.btn-primary(type='submit') Save
+									.modal-header
+										button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+										h4.modal-title Add / Edit Team
+									.modal-body
+										.form-group
+											.col-sm-12
+												input#team-form-id.form-control(type='hidden' name='_id' value='')
+												input#team-form-name.form-control(type='text' required name='team' value='' placeholder='Team Name' autofocus)
+									.modal-footer
+										button.btn.btn-default(type='button', data-dismiss='modal') Close
+										button.btn.btn-primary(type='submit') Save
 
 block scripts
 	script(src='/js/jquery/jquery-ui.custom.min.js')
