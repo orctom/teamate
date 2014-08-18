@@ -5,18 +5,45 @@ block content
 			h1.page-header Users
 			.col-sm-3
 				table.table.table-striped.table-bordered.table-hover
-					thead
+					tbody#ungrouped-users.dragdrop
 						tr
-							th.col-sm-3 User not groupped
-					tbody
+							th User not grouped
 						if users
 							each user, i in users
-								tr
+								tr(id='#{user._id}')
 									td
-										img(src='#{user.avatarUrl}?s=24')
 										|#{user.name}
 			.col-sm-9
 				#teamContainer
+					if teams
+						each team, i in teams
+							if team.name
+								.panel.panel-default
+									.panel-heading
+										i.fa.fa-users.fa-fw &nbsp;
+										span #{team.name}
+										.pull-right
+											.btn-group
+												button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown' type='button')
+													| Actions
+													span.caret
+												ul.dropdown-menu.pull-right(role='dropdown')
+													li
+														a(href='#' data-toggle='modal', data-target='#teamModal' data-id='#{team._id}', data-name='#{team.name}') Edit
+													li
+														a(href='#' data-toggle='modal' data-target='#confirm-delete' data-id='#{team._id}') Delete
+									.panel-body
+										table.table.table-striped.table-bordered.table-hover
+											tbody.dragdrop(id='#{team._id}')
+												tr
+													td
+														b Members
+												if team.users
+													each user, i in team.users
+														tr(id='#{user._id}')
+															td
+																| #{user.name}
+
 				div
 					a.btn.btn-primary(data-toggle='modal', data-target='#teamModal') Add Team
 					#teamModal.modal.fade
@@ -36,5 +63,5 @@ block content
 										button.btn.btn-primary(type='submit') Save
 
 block scripts
-	script(src='/js/jquery/jquery-ui.custom.min.js')
+	script(src='/js/jquery/jquery-ui-1.11.1.min.js')
 	script(src='/js/user.js')

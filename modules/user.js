@@ -1,21 +1,53 @@
 var template = require("../views/templates/team-item.jade");
 
 var renderTeam = function(team) {
+    var html = template(team);
     if (team.update) {
-        $('#' + team._id).replaceWith(template(team));
+        $('#' + team._id).replaceWith(html);
     } else {
-        $('#teamContainer').append(template(team));
+        $('#teamContainer').append(html);
+        enableDragDrop();
     }
 };
 
-/**
- * load teams
- */
-$.get('/teams', function(data) {
-    for (var key in data) {
-        renderTeam(data[key]);
-    }
-});
+
+var isTeamChanged = false;
+var enableDragDrop = function() {
+    $('.dragdrop').sortable({
+        connectWith: '.dragdrop',
+        cursor: 'move',
+        cursorAt: {
+            left: 5
+        },
+        items: '> tr:not(:first)',
+        tolerance: 'pointer',
+        start: function(event, ui) {
+            isTeamChanged = false;
+        },
+        stop: function(event, ui) {
+            if (!isTeamChanged) {
+                $(this).sortable('cancel');
+            }
+        },
+        receive: function(event, ui) {
+            isTeamChanged = true;
+            var teamId = $(event.target).prop('id');
+            var userId = ui.item.prop('id');
+            console.log("team id = " + teamId);
+            console.log("user id = " + userId);
+            console.log('persist...');
+            $.post('/user/team/update', {
+                teamId: teamId,
+                userId: userId
+            }, function(data) {
+                console.log("===== persited =====");
+                console.dir(data);
+            });
+        }
+    }).disableSelection();
+};
+
+enableDragDrop();
 
 /**
  * team modal onsubmit handler

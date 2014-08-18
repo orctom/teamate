@@ -1,9 +1,30 @@
 exports.users = function(db) {
     return function(req, res) {
         var user = db.get('user');
-        user.find({}, {}, function(error, data) {
-            res.render('user/users', {
-                users: data
+        var team = db.get('team');
+        var notGrouped = "not-grouped";
+        user.find({}, {}, function(error, users) {
+            team.find({}, {}, function(error, teams) {
+                var teamData = {};
+                var userData = [];
+                for (var key in teams) {
+                    var teamEntity = teams[key];
+                    teamEntity.users = [];
+                    teamData[teamEntity._id] = teamEntity;
+                }
+                for (var key in users) {
+                    var userEntity = users[key];
+                    var teamId = userEntity.teamId;
+                    if (teamId && teamData[teamId]) {
+                        teamData[teamId].users.push(userEntity);
+                    } else {
+                        userData.push(userEntity);
+                    }
+                }
+                res.render('user/users', {
+                    teams: teamData,
+                    users: userData
+                });
             });
         });
     };
@@ -14,6 +35,25 @@ exports.teams = function(db) {
         var team = db.get('team');
         team.find({}, {}, function(error, data) {
             res.json(data);
+        });
+    };
+};
+
+exports.updateTeamOfUser = function(db) {
+    return function(req, res) {
+        var user = db.get('user');
+        var userId = req.body.userId;
+        var teamId = req.body.teamId;
+        user.update({
+            _id: userId
+        }, {
+            $set: {
+                teamId: teamId
+            }
+        }, function(data) {
+            res.json({
+                sucess: true
+            });
         });
     };
 };

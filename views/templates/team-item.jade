@@ -1,4 +1,4 @@
-.panel.panel-default(id='#{_id}')
+.panel.panel-default
 	.panel-heading
 		i.fa.fa-users.fa-fw &nbsp;
 		span #{name}
@@ -9,7 +9,12 @@
 					span.caret
 				ul.dropdown-menu.pull-right(role='dropdown')
 					li
-						a(href='#' data-toggle='modal', data-target='#teamModal' data-id='#{_id}', data-name='#{name}') Edit
+						a(href='#' data-toggle='modal', data-target='#odal' data-id='#{_id}', data-name='#{name}') Edit
 					li
 						a(href='#' data-toggle='modal' data-target='#confirm-delete' data-id='#{_id}') Delete
 	.panel-body
+		table.table.table-striped.table-bordered.table-hover
+			tbody.dragdrop(id='#{_id}')
+				tr
+					td
+						b Members

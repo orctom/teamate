@@ -40,6 +40,7 @@ module.exports = function(app, passport, db, logger) {
 
     //=====================   user / team   =======================
     app.get('/users', requireLogin, user.users(db));
+    app.post('/user/team/update', requireLogin, user.updateTeamOfUser(db));
     app.get('/teams', requireLogin, user.teams(db));
     app.post('/team/save', requireLogin, user.saveTeam(db));
     app.post('/team/delete/:id', requireLogin, user.deleteTeam(db));
