@@ -3,7 +3,9 @@ var template = require("../views/templates/team-item.jade");
 var renderTeam = function(team) {
     var html = template(team);
     if (team.update) {
-        $('#' + team._id).replaceWith(html);
+        var $teamPanel = $('#team-' + team._id);
+        $('.title', $teamPanel).html(team.name);
+        $('a[data-name]', $teamPanel).data('name', team.name);
     } else {
         $('#teamContainer').append(html);
         enableDragDrop();
@@ -33,16 +35,10 @@ var enableDragDrop = function() {
             isTeamChanged = true;
             var teamId = $(event.target).prop('id');
             var userId = ui.item.prop('id');
-            console.log("team id = " + teamId);
-            console.log("user id = " + userId);
-            console.log('persist...');
             $.post('/user/team/update', {
                 teamId: teamId,
                 userId: userId
-            }, function(data) {
-                console.log("===== persited =====");
-                console.dir(data);
-            });
+            }, function(data) {});
         }
     }).disableSelection();
 };
@@ -79,7 +75,10 @@ $('#teamModal').on('show.bs.modal', function(e) {
     } else {
         $modal.find('.modal-title').html('Add Team');
     }
-    $('#team-form-name').val(name);
+    if (name) {
+        $('#team-form-name').val(name);
+    }
+    $('#team-form-name').focus();
 });
 
 /**

@@ -1,7 +1,7 @@
-.panel.panel-default
+.panel.panel-default(id='team-#{_id}')
 	.panel-heading
 		i.fa.fa-users.fa-fw &nbsp;
-		span #{name}
+		span.title #{name}
 		.pull-right
 			.btn-group
 				button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown' type='button')
@@ -9,7 +9,7 @@
 					span.caret
 				ul.dropdown-menu.pull-right(role='dropdown')
 					li
-						a(href='#' data-toggle='modal', data-target='#odal' data-id='#{_id}', data-name='#{name}') Edit
+						a(href='#' data-toggle='modal' data-target='#odal' data-id='#{_id}' data-name='#{name}') Edit
 					li
 						a(href='#' data-toggle='modal' data-target='#confirm-delete' data-id='#{_id}') Delete
 	.panel-body

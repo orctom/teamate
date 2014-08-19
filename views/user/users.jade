@@ -18,10 +18,10 @@ block content
 					if teams
 						each team, i in teams
 							if team.name
-								.panel.panel-default
+								.panel.panel-default(id='team-#{team._id}')
 									.panel-heading
 										i.fa.fa-users.fa-fw &nbsp;
-										span #{team.name}
+										span.title #{team.name}
 										.pull-right
 											.btn-group
 												button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown' type='button')
@@ -29,7 +29,7 @@ block content
 													span.caret
 												ul.dropdown-menu.pull-right(role='dropdown')
 													li
-														a(href='#' data-toggle='modal', data-target='#teamModal' data-id='#{team._id}', data-name='#{team.name}') Edit
+														a(href='#' data-toggle='modal' data-target='#teamModal' data-id='#{team._id}' data-name='#{team.name}') Edit
 													li
 														a(href='#' data-toggle='modal' data-target='#confirm-delete' data-id='#{team._id}') Delete
 									.panel-body
@@ -46,13 +46,13 @@ block content
 
 				div
 					a.btn.btn-primary(data-toggle='modal', data-target='#teamModal') Add Team
-					#teamModal.modal.fade
+					#teamModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='teamModallabel', aria-hidden='true')
 						.modal-dialog
 							.modal-content
 								form#team-form.form(action='', method='POST', role='form')
 									.modal-header
 										button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
-										h4.modal-title Add / Edit Team
+										h4#teamModallabel.modal-title Add / Edit Team
 									.modal-body
 										.form-group
 											.col-sm-12
