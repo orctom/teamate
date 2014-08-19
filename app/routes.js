@@ -39,15 +39,14 @@ module.exports = function(app, passport, db, logger) {
     app.get('/activities/changes/:username', requireLogin, activity.changes(db));
 
     //=====================   user / team   =======================
+    app.get('/teams', requireLogin, user.teams(db));
+    app.get('/team/:id/users', requireLogin, user.usersOfTeam(db));
+
+    //=====================   Admin   =======================
     app.get('/users', requireLogin, user.users(db));
     app.post('/user/team/update', requireLogin, user.updateTeamOfUser(db));
-    app.get('/teams', requireLogin, user.teams(db));
     app.post('/team/save', requireLogin, user.saveTeam(db));
     app.post('/team/delete/:id', requireLogin, user.deleteTeam(db));
-
-    //=====================   admin (maintain teams)  =======================
-    app.get('/admin/teams', requireAdmin, user.teams);
-    app.get('/admin/team/:id/users', requireAdmin, user.usersOfTeam);
 };
 
 function requireLogin(req, res, next) {

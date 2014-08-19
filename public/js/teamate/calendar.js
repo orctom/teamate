@@ -177,12 +177,17 @@ reloadEvents = function() {
 };
 
 deleteEvent = function() {
-    if (confirm('Sure to delete this event?')) {
-        var url = '/calendar/event/delete/' + $('#event-editor-id').val();
+    var eventId = $('#event-editor-id').val();
+    if (eventId) {
+        if (confirm('Sure to delete this event?')) {
+            var url = '/calendar/event/delete/' + eventId;
+            closeEventEditor();
+            $.get(url, function() {
+                reloadEvents();
+            });
+        }
+    } else {
         closeEventEditor();
-        $.get(url, function() {
-            reloadEvents();
-        });
     }
 };
 

@@ -60,10 +60,8 @@ require('./config/passport')(passport);
 /// error handlers
 require('./config/error-handler')(app);
 
-
 // routes
 require('./app/routes.js')(app, passport, db, config, logger);
-
 
 app.configure('development', function() {
     app.use(express.errorHandler());

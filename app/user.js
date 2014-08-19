@@ -109,11 +109,12 @@ exports.deleteTeam = function(db) {
 
 exports.usersOfTeam = function(db) {
     return function(req, res) {
-        var team = db.get('team');
-        team.find({}, {}, function(error, data) {
-            res.render('team/users', {
-                "users": data
-            });
+        var user = db.get('user');
+        var teamId = req.params.id;
+        user.find({
+            teamId: teamId
+        }, {}, function(error, data) {
+            res.json(data);
         });
     };
 };

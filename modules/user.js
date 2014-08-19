@@ -12,7 +12,6 @@ var renderTeam = function(team) {
     }
 };
 
-
 var isTeamChanged = false;
 var enableDragDrop = function() {
     $('.dragdrop').sortable({
@@ -54,6 +53,7 @@ $('#team-form').on('submit', function(event) {
     $.post('/team/save', $this.serialize(), function(data) {
         if (data) {
             renderTeam(data);
+            refreshMenu();
         }
     });
     $this.trigger('reset');
@@ -91,9 +91,16 @@ $('#confirm-delete').on('show.bs.modal', function(e) {
     $modal.find('.danger').bind('click', function() {
         $.post('/team/delete/' + _id, function(data) {
             if (data && data._id) {
-                $('#' + data._id).fadeOut();
+                $('#team-' + data._id).fadeOut();
+                refreshMenu();
             }
         });
         $modal.modal('hide');
     });
 });
+
+// ============ menu activity teams ==============
+var nav = require('./nav');
+var refreshMenu = function() {
+    nav.refreshMenu(true);
+};
