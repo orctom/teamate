@@ -17,7 +17,7 @@ module.exports = function(config, schedule, logger) {
         schedule.scheduleJob(activityCron, function() {
             console.log('============= loading activities ============== ' + new Date());
             var count = 0;
-            var lastActivityDate;
+            var lastActivityDate = new Date();
             activity.find({}, {
                 limit: 1,
                 sort: {
@@ -25,7 +25,7 @@ module.exports = function(config, schedule, logger) {
                 }
             }, function(error, lastActivities) {
                 if (lastActivities && lastActivities[0]) {
-                    lastActivityDate = lastActivities[0].date;
+                    lastActivityDate = new Date(lastActivities[0].date);
                 }
                 api.activities(config.auth.username, config.auth.password, function(error, data) {
                     console.log("-------------------------------------------- " + ++count);
@@ -53,14 +53,14 @@ module.exports = function(config, schedule, logger) {
                             });
                         }
                     });
-                }, new Date(lastActivityDate).getTime());
+                }, lastActivityDate.getTime());
             });
         });
 
         schedule.scheduleJob(changesCron, function() {
             console.log('============= loading changesets ============== ' + new Date());
             var count = 0;
-            var lastChangeDate;
+            var lastChangeDate = new Date();
             change.find({}, {
                 limit: 1,
                 sort: {
@@ -68,7 +68,7 @@ module.exports = function(config, schedule, logger) {
                 }
             }, function(error, lastChanges) {
                 if (lastChanges && lastChanges[0]) {
-                    lastChangeDate = lastChanges[0].date;
+                    lastChangeDate = new Date(lastChanges[0].date);
                 }
 
                 console.log("lastChangeDate: " + lastChangeDate);
@@ -93,7 +93,7 @@ module.exports = function(config, schedule, logger) {
                             });
                         }
                     }
-                }, new Date(lastChangeDate));
+                }, lastChangeDate);
             });
         });
     }
