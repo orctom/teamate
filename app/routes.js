@@ -34,7 +34,7 @@ module.exports = function(app, passport, db, logger) {
     app.get('/calendar/event/delete/:id', requireLogin, calendar.deleteEvent(db));
 
     //=====================   activity   =======================
-    app.get('/activities', requireLogin, activity.dashboard(db));
+    app.get('/activities/:teamId', requireLogin, activity.dashboard(db));
     app.get('/activities/events/:username', requireLogin, activity.events(db));
     app.get('/activities/changes/:username', requireLogin, activity.changes(db));
 

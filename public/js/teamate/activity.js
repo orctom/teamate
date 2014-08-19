@@ -32,7 +32,7 @@ $(function() {
                 }
             });
         },
-        events: '/activities/events/nick.patel'
+        //events: '/activities/events/nick.patel'
         //events: '/activities/changes/patrick.wunier'
     });
 
@@ -63,4 +63,9 @@ renderCategoriesDropdown = function() {
 
 reloadEvents = function() {
     $('#calendar').fullCalendar('refetchEvents');
+};
+
+var loadActivity = function(user) {
+    $('#calendar').fullCalendar('removeEvents');
+    $('#calendar').fullCalendar('addEventSource', '/activities/events/' + user);
 };
