@@ -1,0 +1,35 @@
+extends layout/layout
+
+block content
+	.row.page-title-wrapper
+		h1.page-header Weekly Report
+		.row.page-title-tools
+			.col-xs-7
+				#datepicker.input-daterange.input-group
+					input#start.input-sm.form-control(type='text' name='start' value='#{start}')
+					span.input-group-addon to
+					input#end.input-sm.form-control(type='text' name='end' value='#{end}')
+			.col-xs-2
+				button.btn.btn-default.btn-sm(onclick='reload()')
+					span.glyphicon.glyphicon-repeat
+					|&nbsp;Reload
+	.row
+		.col-xs-12
+			if changes
+				.panel.panel-default
+					.panel-heading Changes
+					.panel-body
+						ul
+							each change, i in changes
+								li #{change.comment}
+	.row
+		.col-xs-12
+			if activities
+				.panel.panel-default
+					.panel-heading Activities
+					.panel-body
+						ul
+							each activity, i in activities
+								li #{activity.title}
+block scripts
+	script(src='/js/teamate/report.js')

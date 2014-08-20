@@ -5,6 +5,7 @@ var task = require('./task');
 var calendar = require('./calendar');
 var activity = require('./activity');
 var user = require('./user');
+var report = require('./report');
 
 module.exports = function(app, passport, db, logger) {
 
@@ -37,6 +38,10 @@ module.exports = function(app, passport, db, logger) {
     app.get('/activities/:teamId', requireLogin, activity.dashboard(db));
     app.get('/activities/events/:username', requireLogin, activity.events(db));
     app.get('/activities/changes/:username', requireLogin, activity.changes(db));
+
+    //=====================   report   =======================
+    app.get('/report', requireLogin, report.report(db));
+    app.get('/report-data', requireLogin, report.reportData(db));
 
     //=====================   user / team   =======================
     app.get('/teams', requireLogin, user.teams(db));
