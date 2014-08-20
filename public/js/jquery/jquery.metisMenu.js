@@ -1,10 +1,11 @@
-;(function ($, window, document, undefined) {
+;
+(function($, window, document, undefined) {
 
     var pluginName = "metisMenu",
         defaults = {
             toggle: true
         };
-        
+
     function Plugin(element, options) {
         this.element = element;
         this.settings = $.extend({}, defaults, options);
@@ -14,7 +15,7 @@
     }
 
     Plugin.prototype = {
-        init: function () {
+        init: function() {
 
             var $this = $(this.element),
                 $toggle = this.settings.toggle;
@@ -22,7 +23,7 @@
             $this.find('li.active').has('ul').children('ul').addClass('collapse in');
             $this.find('li').not('.active').has('ul').children('ul').addClass('collapse');
 
-            $this.find('li').has('ul').children('a').on('click', function (e) {
+            $this.find('li').has('ul').children('a').on('click', function(e) {
                 e.preventDefault();
 
                 $(this).parent('li').children('ul').collapse('toggle');
@@ -31,17 +32,17 @@
                     $(this).parent('li').siblings().removeClass('active').children('ul.in').collapse('hide');
                 }
             });
-            
+
             $this.find('li').children('a').each(function() {
-        		if ($(this).attr('href') == location.pathname) {
-        			$(this).parent().addClass('active').parent().addClass('collapse in').parent().addClass('collapse in');
-        		}
-        	});
+                if ($(this).prop('href') == location.pathname) {
+                    $(this).parent().addClass('active').parent().addClass('collapse in').parent().addClass('collapse in');
+                }
+            });
         }
     };
 
-    $.fn[ pluginName ] = function (options) {
-        return this.each(function () {
+    $.fn[pluginName] = function(options) {
+        return this.each(function() {
             if (!$.data(this, "plugin_" + pluginName)) {
                 $.data(this, "plugin_" + pluginName, new Plugin(this, options));
             }

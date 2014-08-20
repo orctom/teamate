@@ -100,7 +100,6 @@ $('#confirm-delete').on('show.bs.modal', function(e) {
 });
 
 // ============ menu activity teams ==============
-var nav = require('./nav');
 var refreshMenu = function() {
-    nav.refreshMenu(true);
+    require('./nav').refreshMenu(true);
 };

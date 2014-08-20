@@ -20,6 +20,15 @@ var appendTeamToMenu = function(teams) {
         var team = teams[key];
         $activityMenu.append(template(team));
     }
+    highlightActiveItem();
+};
+
+var highlightActiveItem = function() {
+    $('#side-menu').find('li').children('a').each(function() {
+        if ($(this).prop('href') == location) {
+            $(this).parent().addClass('active').parent().addClass('collapse in').parent().addClass('collapse in');
+        }
+    });
 };
 
 exports.refreshMenu();
