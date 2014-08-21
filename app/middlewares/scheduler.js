@@ -70,16 +70,15 @@ module.exports = function(config, schedule, logger) {
                 if (lastChanges && lastChanges[0]) {
                     lastChangeDate = new Date(lastChanges[0].date);
                 }
-
-                console.log("lastChangeDate: " + lastChangeDate);
-
                 api.changeset(config.auth.token, function(error, csids) {
-                    if (!error && csids) {
+                    if (error) {
+                        console.log('[ERROR]: ' + error);
+                    } else if (csids) {
                         for (var i in csids) {
                             var csid = csids[i];
+                            console.log('csid: ' + csid);
                             api.changes(csid, config.auth.token, function(error, data) {
-                                console.log("---------------------- " + ++count);
-                                console.log(data.date);
+                                console.log(data.author + ": " + data.comment);
                                 if (!error) {
                                     change.find({
                                         date: data.date
@@ -92,6 +91,8 @@ module.exports = function(config, schedule, logger) {
                                 }
                             });
                         }
+                    } else {
+                        console.log('No changeset found');
                     }
                 }, lastChangeDate);
             });

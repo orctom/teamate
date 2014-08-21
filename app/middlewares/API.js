@@ -95,7 +95,6 @@ exports.reviews = function(token, done) {
 };
 
 exports.changeset = function(token, done, start) {
-    console.log("start = " + start);
     if (!start) {
         start = getDateString(null, oneMonthAgo)
     } else {
@@ -105,7 +104,6 @@ exports.changeset = function(token, done, start) {
         FEAUTH: token,
         start: start
     };
-    console.log("start = " + start);
     var url = "https://ecomsvn.officedepot.com/rest-service-fe/revisionData-v1/changesetList/ECOM";
     rest.get(url, params, function(error, data) {
         if (error) {
@@ -114,7 +112,13 @@ exports.changeset = function(token, done, start) {
             if (data && data.csid) {
                 done(null, data.csid);
             } else {
-                done(new Error(data.error));
+                if (data.message) {
+                    done(data.message);
+                } else if (data.error) {
+                    done(data.error);
+                } else {
+                    done(data);
+                }
             }
         }
     });
