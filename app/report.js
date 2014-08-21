@@ -38,6 +38,8 @@ exports.reportData = function(db) {
 var getData = function(db, start, end, users, done) {
     var activity = db.get('activity');
     var change = db.get('change');
+    var user = db.get('user');
+    var team = db.get('team');
 
     var startDate = start ? new Date(moment(start)) : new Date(moment().weekday(1));
     var endDate = end ? new Date(moment(end)) : new Date();
@@ -70,6 +72,38 @@ var getData = function(db, start, end, users, done) {
                 }
             }, {}, function(error, data) {
                 callback(null, data);
+            });
+        },
+        users: function(callback) {
+            user.find({
+                username: {
+                    $in: users
+                }
+            }, function(error, data) {
+                if (error) {
+                    callback(error);
+                }
+                var teams = {};
+                var teamIds = [];
+                for (var key in data) {
+                    var _user = data[key];
+                    teams[_user.teamId] = _user;
+                    teamIds.push(_user.teamId);
+                }
+                team.find({
+                    _id: {
+                        $in: teamIds
+                    }
+                }, function(error, data) {
+                    if (error) {
+                        callback(error);
+                    }
+                    for (key in data) {
+                        var _team = data[key];
+                        teams[_team._id].teamName = _team.name;
+                    }
+                    callback(null, teams);
+                });
             });
         }
     }, function(err, results) {
