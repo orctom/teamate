@@ -6,3 +6,8 @@ var reload = function() {
         window.location.href = url;
     }
 };
+
+$('#datepicker').datepicker({
+    format: "yyyy-mm-dd",
+    endDate: "today"
+});

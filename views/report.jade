@@ -1,5 +1,6 @@
 extends layout/layout
-
+block styles
+	link(rel='stylesheet', href='/css/bootstrap-datepicker.css')
 block content
 	.row.page-title-wrapper
 		h1.page-header Weekly Report
@@ -32,4 +33,5 @@ block content
 							each activity, i in activities
 								li #{activity.title}
 block scripts
+	script(src='/js/bootstrap/bootstrap-datepicker.js')
 	script(src='/js/teamate/report.js')
