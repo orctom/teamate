@@ -1,4 +1,6 @@
 var rest = require('./rest');
+var request = require('request');
+var cheerio = require('cheerio');
 var FeedParser = require('feedparser');
 
 var oneMonthAgo = -3600000 * 24 * 30;
@@ -9,7 +11,7 @@ exports.login = function(username, password, done) {
     var params = {
         userName: username,
         password: password
-    }
+    };
     var url = "https://ecomsvn.officedepot.com/rest-service/auth-v1/login";
     rest.get(url, params, function(error, data) {
         console.log("data: " + JSON.stringify(data));
@@ -96,7 +98,7 @@ exports.reviews = function(token, done) {
 
 exports.changeset = function(token, done, start) {
     if (!start) {
-        start = getDateString(null, oneMonthAgo)
+        start = getDateString(null, oneMonthAgo);
     } else {
         start = getDateString(start);
     }
@@ -148,6 +150,67 @@ exports.changes = function(csid, token, done) {
             }
         }
     });
+};
+
+var headers;
+formLogin = function(username, password, callback) {
+    request.post('https://ecomsvn.officedepot.com/login', {
+        form: {
+            username: username,
+            password: password
+        },
+        jar: true
+    }, function(error, response, data) {
+        console.log("login " + error);
+        headers = response.headers;
+        exports.parseChangesFromPage(username, password);
+    });
+};
+
+exports.parseChangesFromPage = function(username, password) {
+    var url = 'https://ecomsvn.officedepot.com/user/' + username;
+    var params = {
+        headers: headers,
+        jar: true,
+        url: url
+    };
+    console.log('url = ' + url);
+    request(params, function(error, response, body) {
+        console.log('======');
+        if (error) {
+            console.log("[ERROR]" + JSON.stringify(error));
+        } else if (response.statusCode != 200) {
+            console.log("[ERROR] status code: " + response.statusCode + ", " + error);
+        } else {
+            console.log('loaded');
+            var $ = cheerio.load(body);
+            if ($('#password').length > 0) {
+                console.log('goto login...');
+                formLogin(username, password);
+                return;
+            }
+            var $stream = $('.article-changeset');
+            console.log('stream =========' + $stream.html());
+            var $changes = $stream.find('.article-changeset');
+            console.log('changes: ' + $changes.html());
+
+            $('.article-changeset').each(function(i, elem) {
+                console.log('one change');
+            });
+
+
+            $stream.find('.article-changeset').each(function(i, elem) {
+                console.log(i + ' = ' + elem);
+                var $this = $(this);
+                var $message = $this.find('.article-message').html();
+                var $files = $this.find('.stream-files > .abbreviate-path-grower').html();
+                //console.log('message = ' + $message);
+                //console.log('files   = ' + $files);
+            });
+            console.log('end');
+        }
+    });
+    console.log('request sent');
 };
 
 // =====================     jira     =====================
@@ -221,7 +284,7 @@ exports.search = function(jql, username, password, done, startAt) {
 exports.unwatch = function(jira, username, password, done) {
     var params = {
         username: username
-    }
+    };
     var url = "https://officedepot.atlassian.net/rest/api/2/issue/" + jira + "/watchers";
     rest.delete(url, params, function(error, data) {
         console.log("error: " + error);
@@ -262,7 +325,7 @@ exports.activities = function(username, password, done, after) {
     feedparser.on('readable', function() {
         var stream = this;
         var item;
-        while (item = stream.read()) {
+        while ((item = stream.read())) {
             var activity = {
                 title: item.title,
                 date: item.date,
@@ -287,7 +350,7 @@ function auth(username, password) {
     return {
         username: username,
         password: password
-    }
+    };
 }
 
 function getJIRA(data) {

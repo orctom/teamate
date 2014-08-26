@@ -42,7 +42,7 @@ function testChanges() {
                 for (var i in csids) {
                     var csid = csids[i];
                     api.changes(csid, token, function(error, data) {
-                        console.log("---------------------- " + ++count);
+                        console.log("---------------------- " + (++count));
                         console.log(data.date);
                         if (!error) {
                             changes.find({
@@ -75,7 +75,7 @@ function testActivities() {
             lastActivityDate = lastActivities[0].date;
         }
         api.activities(config.auth.username, config.auth.password, function(error, data) {
-            console.log("-------------------------------------------- " + ++count);
+            console.log("-------------------------------------------- " + (++count));
             console.log(data.date + " - " + data.username);
             activities.find({
                 guid: data.guid
@@ -97,5 +97,15 @@ function testUnwtch() {
     api.unwatch('WWWCU-31527', username, password);
 }
 
-unwatchFinishedJIRAs();
+function testParseChangesFromPage() {
+    api.parseChangesFromPage(username, password);
+}
+
+function testFormLogin() {
+    api.formLogin(username, password);
+}
+
+//unwatchFinishedJIRAs();
 //testUnwtch();
+testParseChangesFromPage();
+//testFormLogin();

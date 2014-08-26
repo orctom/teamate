@@ -15,7 +15,7 @@ exports.report = function(db) {
         getData(db, start, end, users, function(data) {
             res.render('report', data);
         });
-    }
+    };
 };
 
 exports.reportData = function(db) {
@@ -32,7 +32,7 @@ exports.reportData = function(db) {
         getData(db, start, end, users, function(data) {
             res.json(data);
         });
-    }
+    };
 };
 
 var getData = function(db, start, end, users, done) {
@@ -98,7 +98,7 @@ var getData = function(db, start, end, users, done) {
                     if (error) {
                         callback(error);
                     }
-                    for (key in data) {
+                    for (var key in data) {
                         var _team = data[key];
                         teams[_team._id].teamName = _team.name;
                     }

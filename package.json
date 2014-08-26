@@ -28,6 +28,7 @@
     "browserify-middleware": "~2.4.0",
     "jadeify": "~2.5.0",
     "async": "~0.9.0",
-    "moment": "~2.8.1"
+    "moment": "~2.8.1",
+    "cheerio": "~0.17.0"
   }
 }
