@@ -57,6 +57,7 @@ $('#team-form').on('submit', function(event) {
         }
     });
     $this.trigger('reset');
+    $this.find('input').val('');
     $('#teamModal').modal('hide');
 });
 
