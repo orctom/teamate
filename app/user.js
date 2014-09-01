@@ -3,17 +3,21 @@ exports.users = function(db) {
         var user = db.get('user');
         var team = db.get('team');
         var notGrouped = "not-grouped";
-        user.find({}, {}, function(error, users) {
+        user.find({}, {
+            sort: {
+                username: 1
+            }
+        }, function(error, users) {
             team.find({}, {}, function(error, teams) {
                 var teamData = {};
                 var userData = [];
-                for (var key in teams) {
-                    var teamEntity = teams[key];
+                for (var i in teams) {
+                    var teamEntity = teams[i];
                     teamEntity.users = [];
                     teamData[teamEntity._id] = teamEntity;
                 }
-                for (var key in users) {
-                    var userEntity = users[key];
+                for (var j in users) {
+                    var userEntity = users[j];
                     var teamId = userEntity.teamId;
                     if (teamId && teamData[teamId]) {
                         teamData[teamId].users.push(userEntity);
