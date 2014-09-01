@@ -57,6 +57,12 @@ var loadActivities = function(config, activity) {
                             user.insert(profile);
                         }
                     });
+                } else { // remove duplicated users
+                    for (var i = 1; i < exists.length; i++) {
+                        user.remove({
+                            _id: exists[i]._id
+                        });
+                    }
                 }
             });
         }, lastActivityDate.getTime());
