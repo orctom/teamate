@@ -189,23 +189,14 @@ exports.parseChangesFromPage = function(username, password) {
                 formLogin(username, password);
                 return;
             }
-            var $stream = $('.article-changeset');
-            console.log('stream =========' + $stream.html());
-            var $changes = $stream.find('.article-changeset');
-            console.log('changes: ' + $changes.html());
 
             $('.article-changeset').each(function(i, elem) {
-                console.log('one change');
-            });
-
-
-            $stream.find('.article-changeset').each(function(i, elem) {
-                console.log(i + ' = ' + elem);
-                var $this = $(this);
+                console.log('changes: ' + i);
+                var $this = cheerio($(this));
                 var $message = $this.find('.article-message').html();
                 var $files = $this.find('.stream-files > .abbreviate-path-grower').html();
-                //console.log('message = ' + $message);
-                //console.log('files   = ' + $files);
+                console.log('message = ' + $message);
+                console.log('files   = ' + $files);
             });
             console.log('end');
         }
