@@ -1,4 +1,5 @@
 var rest = require('./rest');
+var config = require('../../config');
 var request = require('request');
 var cheerio = require('cheerio');
 var FeedParser = require('feedparser');
@@ -152,56 +153,69 @@ exports.changes = function(csid, token, done) {
     });
 };
 
-var headers;
-formLogin = function(username, password, callback) {
+formLogin = function(username, callback) {
     request.post('https://ecomsvn.officedepot.com/login', {
         form: {
-            username: username,
-            password: password
+            username: config.auth.username,
+            password: config.auth.password
         },
         jar: true
     }, function(error, response, data) {
-        console.log("login " + error);
-        headers = response.headers;
-        exports.parseChangesFromPage(username, password);
+        if (error) {
+            console.log('[ERROR] ' + error);
+        } else {
+            console.log("Logged in.");
+            exports.parseChangesFromPage(username, callback);
+        }
     });
 };
 
-exports.parseChangesFromPage = function(username, password) {
+exports.parseChangesFromPage = function(username, callback) {
     var url = 'https://ecomsvn.officedepot.com/user/' + username;
     var params = {
-        headers: headers,
         jar: true,
         url: url
     };
-    console.log('url = ' + url);
     request(params, function(error, response, body) {
-        console.log('======');
         if (error) {
-            console.log("[ERROR]" + JSON.stringify(error));
+            console.log("[ERROR]" + JSON.stringify(error) + ", " + url);
+            callback(error);
         } else if (response.statusCode != 200) {
-            console.log("[ERROR] status code: " + response.statusCode + ", " + error);
+            console.log("[ERROR] status code: " + response.statusCode + ", " + error + ", " + url);
+            callback(404);
         } else {
-            console.log('loaded');
             var $ = cheerio.load(body);
             if ($('#password').length > 0) {
                 console.log('goto login...');
-                formLogin(username, password);
+                formLogin(username, callback);
                 return;
             }
 
+            var datas = [];
             $('.article-changeset').each(function(i, elem) {
-                console.log('changes: ' + i);
                 var $this = cheerio($(this));
-                var $message = $this.find('.article-message').html();
-                var $files = $this.find('.stream-files > .abbreviate-path-grower').html();
-                console.log('message = ' + $message);
-                console.log('files   = ' + $files);
+                var date = new Date($this.find('.article-date > span').attr('title'));
+                var message = $this.find('.article-message').text().replace(/\n/g, '');
+                var jira = jiraPattern.test(message) ? message.replace(jiraPattern, '$1') : null;
+                var data = {
+                    date: date,
+                    jira: jira,
+                    message: message
+                };
+                var files = [];
+                $this.find('.stream-files').find('.file-path').each(function(j, element) {
+                    var $a = cheerio($(this));
+                    files.push({
+                        path: $a.attr('title'),
+                        link: $a.attr('href')
+                    });
+                });
+                data.files = files;
+                datas.push(data);
             });
-            console.log('end');
+            callback(null, datas);
         }
     });
-    console.log('request sent');
 };
 
 // =====================     jira     =====================
