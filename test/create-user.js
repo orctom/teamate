@@ -16,6 +16,7 @@ createUserFromActivities = function() {
                 if (error) {
                     console.log("find user: " + error);
                 }
+                console.log('exists.length = ' + exists.length);
                 if (!exists || exists.length < 1) {
                     api.profile(username, config.auth.token, function(error, profile) {
                         if (profile) {

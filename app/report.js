@@ -64,10 +64,10 @@ var getData = function(db, start, end, users, done) {
         changes: function(callback) {
             change.find({
                 date: {
-                    '$gte': startDate.getTime(),
-                    '$lt': endDate.getTime()
+                    '$gte': startDate,
+                    '$lt': endDate
                 },
-                author: {
+                username: {
                     $in: users
                 }
             }, {}, function(error, data) {
