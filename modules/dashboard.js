@@ -2,8 +2,10 @@ $('#calendar').fullCalendar({
     header: {
         left: '',
         center: 'title',
-        right: 'agendaDay'
+        right: ''
     },
+    defaultView: 'agendaDay',
+    height: 650,
     selectable: true,
     selectHelper: true,
     editable: false,
