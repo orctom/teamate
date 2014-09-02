@@ -8,6 +8,7 @@ var calendar = require('./calendar');
 var activity = require('./activity');
 var user = require('./user');
 var report = require('./report');
+var jira = require('./jira');
 
 module.exports = function(app, passport, db, logger) {
 
@@ -49,6 +50,10 @@ module.exports = function(app, passport, db, logger) {
     //=====================   user / team   =======================
     app.get('/teams', requireLogin, user.teams(db));
     app.get('/team/:id/users', requireLogin, user.usersOfTeam(db));
+
+    //=====================   jira   =======================
+    app.get('/jira/:jira', jira.jira);
+    app.get('/jiras/:jiras', jira.jiras);
 
     //=====================   Admin   =======================
     app.get('/users', requireLogin, user.users(db));

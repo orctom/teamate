@@ -16,22 +16,24 @@ block content
 					|&nbsp;Reload
 	.row
 		.col-xs-12
-			if changes
+			if data
 				.panel.panel-default
 					.panel-heading Changes
-					.panel-body
+					.panel-body#changes
 						ul
-							each change, i in changes
-								li #{change.username} #{change.message}
-	.row
-		.col-xs-12
-			if activities
-				.panel.panel-default
-					.panel-heading Activities
-					.panel-body
-						ul
-							each activity, i in activities
-								li #{activity.title}
+							each team, i in data
+								if team.users && team.users.length > 0
+									li #{team.name}
+										each user, j in team.users
+											ul #{user.name}
+												each changes, k in user.jiras
+													li
+														if '[NON-JIRA]' != k
+															a(href='https://officedepot.atlassian.net/browse/#{k}') #{k}
+														else
+															| #{k}
+														each jira, l in changes
+															ul [#{moment(jira.date).format('YYYY-MM-DD HH:mm')}] #{jira.message}
 block scripts
 	script(src='/js/bootstrap/bootstrap-datepicker.js')
 	script(src='/js/teamate/report.js')

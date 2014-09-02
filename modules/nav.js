@@ -30,3 +30,6 @@ var highlightActiveItem = function() {
         }
     });
 };
+
+// invoke to build the menu
+exports.refreshMenu();

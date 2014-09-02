@@ -1,5 +1,3 @@
-var API = require('./middlewares/API');
-
 exports.login = function(req, res) {
     var msg = String(req.flash('error'));
     res.render('login', {
@@ -14,7 +12,7 @@ exports.doLogin = function(passport) {
             failureRedirect: '/login',
             failureFlash: true
         })(req, res, next);
-    }
+    };
 };
 
 exports.showProfile = function(req, res) {

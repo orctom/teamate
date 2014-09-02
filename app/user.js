@@ -8,7 +8,11 @@ exports.users = function(db) {
                 username: 1
             }
         }, function(error, users) {
-            team.find({}, {}, function(error, teams) {
+            team.find({}, {
+                sort: {
+                    name: 1
+                }
+            }, function(error, teams) {
                 var teamData = {};
                 var userData = [];
                 for (var i in teams) {
@@ -93,6 +97,7 @@ exports.saveTeam = function(db) {
 exports.deleteTeam = function(db) {
     return function(req, res) {
         var team = db.get('team');
+        var user = db.get('user');
         var id = req.params.id;
         if (id) {
             team.remove({
@@ -102,6 +107,11 @@ exports.deleteTeam = function(db) {
                 res.json({
                     _id: id
                 });
+            });
+            user.findAndModify({
+                teamId: id
+            }, {
+                $unset: teamId
             });
         } else {
             res.json({

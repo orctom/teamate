@@ -18,6 +18,9 @@ var app = express();
 
 var logger = require('./config/logger');
 
+// add moment to express
+app.locals.moment = require('moment');
+
 // General Setup
 app.configure(function() {
     app.set('port', process.env.PORT || config.port);

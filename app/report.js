@@ -27,7 +27,11 @@ exports.reportData = function(db) {
             'suo.lu', 'shengbin.cao', 'huawei.zhu',
             'bin.yang', 'jingcao.ma',
             'jia.yanju', 'patrick.wunier',
-            'haili.lui', 'wei.wang', 'shuoshuo.zhang', 'lei.fang'
+            'haili.lui', 'wei.wang', 'shuoshuo.zhang', 'lei.fang',
+            'lefeng.chen', 'zhao.chen', 'zhongzheng.liu',
+            'fei.xue', 'luilu.jiao', 'wayne.qin',
+            'song.wei', 'weiping.he', 'wenshuai.shi', 'zhiqiang.li',
+            'bin.wang', 'chen.yang', 'chunnan.ji', 'nianjun.sun',
         ];
         getData(db, start, end, users, function(data) {
             res.json(data);
@@ -36,7 +40,6 @@ exports.reportData = function(db) {
 };
 
 var getData = function(db, start, end, users, done) {
-    var activity = db.get('activity');
     var change = db.get('change');
     var user = db.get('user');
     var team = db.get('team');
@@ -47,20 +50,6 @@ var getData = function(db, start, end, users, done) {
     console.log('Querying report: [' + startDate + ' - ' + endDate + ']');
 
     async.parallel({
-        activities: function(callback) {
-            activity.find({
-                date: {
-                    '$gte': startDate,
-                    '$lt': endDate
-                },
-                username: {
-                    $in: users
-                },
-                categories: 'commit'
-            }, {}, function(error, data) {
-                callback(null, data);
-            });
-        },
         changes: function(callback) {
             change.find({
                 date: {
@@ -79,41 +68,53 @@ var getData = function(db, start, end, users, done) {
                 username: {
                     $in: users
                 }
-            }, function(error, data) {
-                console.log('================================');
-                console.dir(data);
+            }, function(error, users) {
                 if (error) {
-                    console.log('users error ' + error);
                     callback(error);
                 }
-                var teams = {};
-                var teamIds = [];
-                for (var key in data) {
-                    var _user = data[key];
-                    teams[_user.teamId] = _user;
-                    teamIds.push(_user.teamId);
+                callback(null, users);
+            });
+        },
+        teams: function(callback) {
+            team.find({}, function(error, teams) {
+                if (error) {
+                    callback(error);
                 }
-                team.find({
-                    _id: {
-                        $in: teamIds
-                    }
-                }, function(error, data) {
-                    if (error) {
-                        callback(error);
-                    }
-                    for (var key in data) {
-                        var _team = data[key];
-                        teams[_team._id].teamName = _team.name;
-                    }
-                    callback(null, teams);
-                });
+                callback(null, teams);
             });
         }
     }, function(err, results) {
+        var teams = {};
+        results.teams.map(function(team) {
+            teams[team._id] = team;
+            teams[team._id].users = [];
+        });
+
+        var users = {};
+        results.users.map(function(user) {
+            users[user.username] = user;
+            users[user.username].jiras = {};
+        });
+
+        results.changes.map(function(change) {
+            if (users[change.username]) {
+                var jira = change.jira;
+                if (null === jira || 'null' == jira) {
+                    jira = '[NON-JIRA]';
+                }
+                if (!users[change.username].jiras[jira]) {
+                    users[change.username].jiras[jira] = [];
+                }
+                users[change.username].jiras[jira].push(change);
+            }
+        });
+
+        for (var i in users) {
+            var user = users[i];
+            teams[user.teamId].users.push(user);
+        }
         done({
-            changes: results.changes,
-            activities: results.activities,
-            users: results.users,
+            data: teams,
             start: moment(startDate).format('YYYY-MM-DD'),
             end: moment(endDate).format('YYYY-MM-DD')
         });
