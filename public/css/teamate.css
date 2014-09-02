@@ -316,3 +316,6 @@ table tbody tr.highlight td {
     position: fixed;
     width: 12%;
 }
+.fold {
+    cursor: pointer;
+}

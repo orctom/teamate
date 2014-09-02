@@ -35,9 +35,9 @@ block content
 						each team, i in teams
 							if team.name
 								.panel.panel-default(id='team-#{team._id}')
-									.panel-heading
-										i.fa.fa-users.fa-fw &nbsp;
-										span.title #{team.name}
+									.panel-heading.fold
+										i.fa.fa-users.fa-fw.fold &nbsp;
+										span.title.fold #{team.name}
 										.pull-right
 											.btn-group
 												button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown' type='button')

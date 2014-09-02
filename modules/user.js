@@ -120,6 +120,8 @@ $('#userfilter').keyup(function() {
 /**
  * fold/unfold teams
  */
-$('#teamContainer').find('.panel-heading').on('click', function() {
-    $(this).parent().children('.panel-body').toggle("fold");
+$('#teamContainer').find('.panel-heading').on('click', function(e) {
+    if (e.target.className.indexOf('fold') > -1) {
+        $(this).parent().children('.panel-body').toggle("fold");
+    }
 });
