@@ -30,5 +30,3 @@ var highlightActiveItem = function() {
         }
     });
 };
-
-exports.refreshMenu();

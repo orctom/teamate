@@ -1,5 +1,20 @@
 extends ../layout/layout
 block content
+	#teamModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='teamModallabel' aria-hidden='true')
+		.modal-dialog
+			.modal-content
+				form#team-form.form(action='' method='POST' role='form')
+					.modal-header
+						button.close(type='button' data-dismiss='modal' aria-hidden='true') &times;
+						h4#teamModallabel.modal-title Add / Edit Team
+					.modal-body
+						.form-group
+							.col-sm-12
+								input#team-form-id.form-control(type='hidden' name='_id' value='')
+								input#team-form-name.form-control(type='text' required name='team' value='' placeholder='Team Name' autofocus)
+					.modal-footer
+						button.btn.btn-default(type='button', data-dismiss='modal') Close
+						button.btn.btn-primary(type='submit') Save
 	.row
 		.col-sm-12
 			h1.page-header Users
@@ -8,6 +23,7 @@ block content
 					tbody#ungrouped-users.dragdrop
 						tr
 							th User not grouped
+							input#userfilter.form-control(placeholder='type here to filter...')
 						if users
 							each user, i in users
 								tr(id='#{user._id}')
@@ -43,25 +59,7 @@ block content
 														tr(id='#{user._id}')
 															td
 																| #{user.name}
-
-				div
-					a.btn.btn-primary(data-toggle='modal', data-target='#teamModal') Add Team
-					#teamModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='teamModallabel', aria-hidden='true')
-						.modal-dialog
-							.modal-content
-								form#team-form.form(action='', method='POST', role='form')
-									.modal-header
-										button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
-										h4#teamModallabel.modal-title Add / Edit Team
-									.modal-body
-										.form-group
-											.col-sm-12
-												input#team-form-id.form-control(type='hidden' name='_id' value='')
-												input#team-form-name.form-control(type='text' required name='team' value='' placeholder='Team Name' autofocus)
-									.modal-footer
-										button.btn.btn-default(type='button', data-dismiss='modal') Close
-										button.btn.btn-primary(type='submit') Save
-
+				a.btn.btn-primary(data-toggle='modal', data-target='#teamModal') Add Team
 block scripts
 	script(src='/js/jquery/jquery-ui-1.11.1.min.js')
 	script(src='/js/user.js')

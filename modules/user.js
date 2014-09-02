@@ -90,6 +90,7 @@ $('#confirm-delete').on('show.bs.modal', function(e) {
     var $target = $(e.relatedTarget);
     var _id = $target.data('id');
     $modal.find('.danger').bind('click', function() {
+        $modal.find('.danger').unbind();
         $.post('/team/delete/' + _id, function(data) {
             if (data && data._id) {
                 $('#team-' + data._id).fadeOut();
@@ -104,3 +105,14 @@ $('#confirm-delete').on('show.bs.modal', function(e) {
 var refreshMenu = function() {
     require('./nav').refreshMenu(true);
 };
+
+/**
+ * type filter ungroupped users
+ */
+$('#userfilter').keyup(function() {
+    var rex = new RegExp($(this).val(), 'i');
+    $('#ungrouped-users tr:not(:first)').hide();
+    $('#ungrouped-users tr:not(:first)').filter(function() {
+        return rex.test($(this).text());
+    }).show();
+});

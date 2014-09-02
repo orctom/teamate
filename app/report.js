@@ -80,7 +80,10 @@ var getData = function(db, start, end, users, done) {
                     $in: users
                 }
             }, function(error, data) {
+                console.log('================================');
+                console.dir(data);
                 if (error) {
+                    console.log('users error ' + error);
                     callback(error);
                 }
                 var teams = {};
@@ -110,6 +113,7 @@ var getData = function(db, start, end, users, done) {
         done({
             changes: results.changes,
             activities: results.activities,
+            users: results.users,
             start: moment(startDate).format('YYYY-MM-DD'),
             end: moment(endDate).format('YYYY-MM-DD')
         });
