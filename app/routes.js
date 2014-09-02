@@ -1,5 +1,7 @@
 var API = require('./middlewares/API');
 var config = require('../config');
+
+var dashboard = require('./dashboard');
 var profile = require('./profile');
 var task = require('./task');
 var calendar = require('./calendar');
@@ -10,7 +12,7 @@ var report = require('./report');
 module.exports = function(app, passport, db, logger) {
 
     //=====================   home   =======================
-    app.get('/', requireLogin, calendar.dashboard(db));
+    app.get('/', requireLogin, dashboard.index(db));
 
     //=====================   security   =======================
     app.get('/login', profile.login);
@@ -30,6 +32,7 @@ module.exports = function(app, passport, db, logger) {
     app.get('/task/category/delete/:id', requireLogin, task.deleteCategory(db));
 
     //=====================   calendar   =======================
+    app.get('/events', requireLogin, calendar.dashboard(db));
     app.get('/calendar/events', requireLogin, calendar.events(db));
     app.post('/calendar/events', requireLogin, calendar.update(db));
     app.get('/calendar/event/delete/:id', requireLogin, calendar.deleteEvent(db));
