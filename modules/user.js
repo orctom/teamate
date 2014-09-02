@@ -116,3 +116,10 @@ $('#userfilter').keyup(function() {
         return rex.test($(this).text());
     }).show();
 });
+
+/**
+ * fold/unfold teams
+ */
+$('#teamContainer').find('.panel-heading').on('click', function() {
+    $(this).parent().children('.panel-body').toggle("fold");
+});
