@@ -7,7 +7,6 @@ module.exports = function(config, schedule, logger) {
     var change = db.get('change');
     var user = db.get('user');
 
-    schedule.scheduleJob('*/15 * * * *', loadActivities(config, user, activity));
     if (config.scheduler.enabled) {
         schedule.scheduleJob('* * * * *', function() {
             console.log('The answer to life, the universe, and everything! ' + new Date());
