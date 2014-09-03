@@ -59,7 +59,7 @@ exports.profile = function(username, token, done) {
                 };
                 done(null, user);
             } else {
-                done(new Error(data.error));
+                done('[NOT-JIRA-USER]');
             }
         }
     });

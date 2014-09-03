@@ -1,17 +1,22 @@
 var async = require('async');
 var moment = require('moment');
 
+var users = [
+    'suo.lu', 'shengbin.cao', 'huawei.zhu',
+    'bin.yang', 'jingcao.ma',
+    'jia.yanju', 'patrick.wunier',
+    'haili.lui', 'wei.wang', 'shuoshuo.zhang', 'lei.fang',
+    'lefeng.chen', 'zhao.chen', 'zhongzheng.liu',
+    'fei.xue', 'luilu.jiao', 'wayne.qin',
+    'song.wei', 'weiping.he', 'wenshuai.shi', 'zhiqiang.li',
+    'bin.wang', 'chen.yang', 'chunnan.ji', 'nianjun.sun',
+];
+
 exports.report = function(db) {
     return function(req, res) {
         var start = req.query.start;
         var end = req.query.end;
 
-        var users = [
-            'suo.lu', 'shengbin.cao', 'huawei.zhu',
-            'bin.yang', 'jingcao.ma',
-            'jia.yanju', 'patrick.wunier',
-            'haili.lui', 'wei.wang', 'shuoshuo.zhang', 'lei.fang'
-        ];
         getData(db, start, end, users, function(data) {
             res.render('report', data);
         });
@@ -23,16 +28,6 @@ exports.reportData = function(db) {
         var start = req.query.start;
         var end = req.query.end;
 
-        var users = [
-            'suo.lu', 'shengbin.cao', 'huawei.zhu',
-            'bin.yang', 'jingcao.ma',
-            'jia.yanju', 'patrick.wunier',
-            'haili.lui', 'wei.wang', 'shuoshuo.zhang', 'lei.fang',
-            'lefeng.chen', 'zhao.chen', 'zhongzheng.liu',
-            'fei.xue', 'luilu.jiao', 'wayne.qin',
-            'song.wei', 'weiping.he', 'wenshuai.shi', 'zhiqiang.li',
-            'bin.wang', 'chen.yang', 'chunnan.ji', 'nianjun.sun',
-        ];
         getData(db, start, end, users, function(data) {
             res.json(data);
         });
@@ -44,7 +39,7 @@ var getData = function(db, start, end, users, done) {
     var user = db.get('user');
     var team = db.get('team');
 
-    var startDate = start ? new Date(moment(start)) : new Date(moment().weekday(1));
+    var startDate = start ? new Date(moment(start)) : new Date(moment().weekday(0));
     var endDate = end ? new Date(moment(end)) : new Date();
 
     console.log('Querying report: [' + startDate + ' - ' + endDate + ']');

@@ -18,7 +18,7 @@ var enableDragDrop = function() {
         connectWith: '.dragdrop',
         cursor: 'move',
         cursorAt: {
-            left: 5
+            left: -20
         },
         items: '> tr:not(:first)',
         tolerance: 'pointer',

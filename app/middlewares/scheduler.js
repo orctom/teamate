@@ -110,7 +110,11 @@ var loadByCsid = function(config, change, csid) {
 var loadChangesFromPage = function(config, user, change) {
     console.log('============= parsing changes from page ============== ' + new Date());
     api.parseChangesFromPage(config.auth.username, function(err, datas) {
-        user.find({}, function(error, users) {
+        user.find({
+            flag: {
+                $exists: false
+            }
+        }, function(error, users) {
             if (!error && users) {
                 async.eachLimit(users, 5, function(item, callback) {
                     var username = item.username;

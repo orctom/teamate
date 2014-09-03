@@ -3,7 +3,11 @@ exports.users = function(db) {
         var user = db.get('user');
         var team = db.get('team');
         var notGrouped = "not-grouped";
-        user.find({}, {
+        user.find({
+            flag: {
+                $exists: false
+            }
+        }, {
             sort: {
                 username: 1
             }
