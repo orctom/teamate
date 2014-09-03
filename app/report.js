@@ -106,7 +106,9 @@ var getData = function(db, start, end, users, done) {
 
         for (var i in users) {
             var user = users[i];
-            teams[user.teamId].users.push(user);
+            if (user.teamId) {
+                teams[user.teamId].users.push(user);
+            }
         }
         done({
             data: teams,

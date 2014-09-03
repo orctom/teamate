@@ -112,11 +112,6 @@ exports.deleteTeam = function(db) {
                     _id: id
                 });
             });
-            user.findAndModify({
-                teamId: id
-            }, {
-                $unset: teamId
-            });
         } else {
             res.json({
                 message: 'Invalid request, "_id" expected.'
