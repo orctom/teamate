@@ -1,9 +1,7 @@
 exports.users = function(db) {
     return function(req, res) {
-        var user = db.get('user');
-        var team = db.get('team');
         var notGrouped = "not-grouped";
-        user.find({
+        db.get('user').find({
             flag: {
                 $exists: false
             }
@@ -12,7 +10,7 @@ exports.users = function(db) {
                 username: 1
             }
         }, function(error, users) {
-            team.find({}, {
+            db.get('team').find({}, {
                 sort: {
                     name: 1
                 }
@@ -44,8 +42,7 @@ exports.users = function(db) {
 
 exports.teams = function(db) {
     return function(req, res) {
-        var team = db.get('team');
-        team.find({}, {}, function(error, data) {
+        db.get('team').find({}, {}, function(error, data) {
             res.json(data);
         });
     };
@@ -53,10 +50,9 @@ exports.teams = function(db) {
 
 exports.updateTeamOfUser = function(db) {
     return function(req, res) {
-        var user = db.get('user');
         var userId = req.body.userId;
         var teamId = req.body.teamId;
-        user.update({
+        db.get('user').update({
             _id: userId
         }, {
             $set: {
@@ -72,14 +68,13 @@ exports.updateTeamOfUser = function(db) {
 
 exports.saveTeam = function(db) {
     return function(req, res) {
-        var team = db.get('team');
         var id = req.body._id;
         var name = req.body.team;
         var data = {
             name: name
         };
         if (id) {
-            team.update({
+            db.get('team').update({
                 _id: id
             }, data, function(error, data) {
                 console.log('data: ' + JSON.stringify(data));
@@ -90,7 +85,7 @@ exports.saveTeam = function(db) {
                 });
             });
         } else {
-            team.insert(data, function(error, data) {
+            db.get('team').insert(data, function(error, data) {
                 console.log('data: ' + JSON.stringify(data));
                 res.json(data);
             });
@@ -100,11 +95,9 @@ exports.saveTeam = function(db) {
 
 exports.deleteTeam = function(db) {
     return function(req, res) {
-        var team = db.get('team');
-        var user = db.get('user');
         var id = req.params.id;
         if (id) {
-            team.remove({
+            db.get('team').remove({
                 _id: id
             }, function(error, data) {
                 console.log('data: ' + JSON.stringify(data));
@@ -122,9 +115,8 @@ exports.deleteTeam = function(db) {
 
 exports.usersOfTeam = function(db) {
     return function(req, res) {
-        var user = db.get('user');
         var teamId = req.params.id;
-        user.find({
+        db.get('user').find({
             teamId: teamId
         }, {}, function(error, data) {
             res.json(data);

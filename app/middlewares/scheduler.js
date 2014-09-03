@@ -12,19 +12,19 @@ module.exports = function(config, schedule, logger) {
             console.log('The answer to life, the universe, and everything! ' + new Date());
         });
 
-        schedule.scheduleJob('*/15 * * * *', loadActivities(config, user, activity));
+        schedule.scheduleJob('*/15 * * * *', loadActivities(config, db));
 
         // rest api is down
-        //schedule.scheduleJob('*/30 * * * *', loadChanges(config, change));
-        schedule.scheduleJob('0 0,3,6,12,15,18 * * *', loadChangesFromPage(config, user, change));
+        //schedule.scheduleJob('*/30 * * * *', loadChanges(config, db));
+        schedule.scheduleJob('0 0,3,6,12,15,18 * * *', loadChangesFromPage(config, db));
     }
 };
 
-var loadActivities = function(config, user, activity) {
+var loadActivities = function(config, db) {
     console.log('============= loading activities ============== ' + new Date());
     var count = 0;
     var lastActivityDate = new Date();
-    activity.find({}, {
+    db.get('activity').find({}, {
         limit: 1,
         sort: {
             date: -1
@@ -36,16 +36,16 @@ var loadActivities = function(config, user, activity) {
         api.activities(config.auth.username, config.auth.password, function(error, data) {
             console.log("-------------------------------------------- " + (++count));
             console.log(data.date + " - " + data.username);
-            activity.find({
+            db.get('activity').find({
                 guid: data.guid
             }, function(error, exists) {
                 if (!exists || exists.length < 1) {
-                    activity.insert(data);
+                    db.get('activity').insert(data);
                     console.log("saved activity");
                 }
             });
 
-            user.find({
+            db.get('user').find({
                 username: data.username
             }, function(error, exists) {
                 if (error) {
@@ -54,12 +54,12 @@ var loadActivities = function(config, user, activity) {
                 if (!exists || exists.length < 1) {
                     api.profile(data.username, config.auth.token, function(error, profile) {
                         if (profile) {
-                            user.insert(profile);
+                            db.get('user').insert(profile);
                         }
                     });
                 } else { // remove duplicated users
                     for (var i = 1; i < exists.length; i++) {
-                        user.remove({
+                        db.get('user').remove({
                             _id: exists[i]._id
                         });
                     }
@@ -69,11 +69,11 @@ var loadActivities = function(config, user, activity) {
     });
 };
 
-var loadChanges = function(config, change) {
+var loadChanges = function(config, db) {
     console.log('============= loading changesets ============== ' + new Date());
     var count = 0;
     var lastChangeDate = new Date();
-    change.find({}, {
+    db.get('change').find({}, {
         limit: 1,
         sort: {
             date: -1
@@ -88,7 +88,7 @@ var loadChanges = function(config, change) {
             } else if (csids) {
                 for (var i in csids) {
                     var csid = csids[i];
-                    loadByCsid(config, change, csid);
+                    loadByCsid(config, db, csid);
                 }
             } else {
                 console.log('No changeset found');
@@ -97,20 +97,20 @@ var loadChanges = function(config, change) {
     });
 };
 
-var loadByCsid = function(config, change, csid) {
+var loadByCsid = function(config, db, csid) {
     console.log('csid: ' + csid);
     api.changes(csid, config.auth.token, function(error, data) {
         console.log(data.author + ": " + data.comment);
         if (!error) {
-            saveChangeIfNotExist(change, data);
+            saveChangeIfNotExist(db, data);
         }
     });
 };
 
-var loadChangesFromPage = function(config, user, change) {
+var loadChangesFromPage = function(config, db) {
     console.log('============= parsing changes from page ============== ' + new Date());
     api.parseChangesFromPage(config.auth.username, function(err, datas) {
-        user.find({
+        db.get('user').find({
             flag: {
                 $exists: false
             }
@@ -118,7 +118,7 @@ var loadChangesFromPage = function(config, user, change) {
             if (!error && users) {
                 async.eachLimit(users, 5, function(item, callback) {
                     var username = item.username;
-                    loadChangesFromPageOfUser(user, change, username, function() {
+                    loadChangesFromPageOfUser(db, username, function() {
                         callback();
                     });
                 }, function(err) {
@@ -133,31 +133,31 @@ var loadChangesFromPage = function(config, user, change) {
     });
 };
 
-var loadChangesFromPageOfUser = function(user, change, username, callback) {
+var loadChangesFromPageOfUser = function(db, username, callback) {
     api.parseChangesFromPage(username, function(error, datas) {
         if (404 == error) {
             console.log('Delete user no longer exists: ' + username);
-            user.remove({
+            db.get('user').remove({
                 username: username
             });
         } else if (datas) {
             for (var key in datas) {
                 var data = datas[key];
                 data.username = username;
-                saveChangeIfNotExist(change, data);
+                saveChangeIfNotExist(db, data);
             }
             callback();
         }
     });
 };
 
-var saveChangeIfNotExist = function(change, data) {
-    change.find({
+var saveChangeIfNotExist = function(db, data) {
+    db.get('change').find({
         date: data.date,
         username: data.username
     }, function(error, exists) {
         if (!exists || exists.length < 1) {
-            change.insert(data);
+            db.get('change').insert(data);
             console.log("saved changes");
         }
     });

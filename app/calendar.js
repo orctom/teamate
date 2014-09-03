@@ -6,12 +6,11 @@ exports.dashboard = function(db) {
 
 exports.events = function(db) {
     return function(req, res) {
-        var event = db.get('event');
         var start = req.query.start;
         var end = req.query.end;
-        var startDate = getDate(start);
-        var endDate = getDate(end);
-        event.find({
+        var startDate = new Date(start);
+        var endDate = new Date(end);
+        db.get('event').find({
             startDate: {
                 '$lt': endDate
             },
@@ -33,7 +32,6 @@ exports.update = function(db) {
                 message: 'not permited!'
             });
         }
-        var event = db.get('event');
         var id = req.body._id;
         var data = {
             id: req.body.id,
@@ -53,10 +51,10 @@ exports.update = function(db) {
             data.user = req.user.username;
         }
 
-        data.startDate = getDate(data.start);
-        data.endDate = data.end ? getDate(data.end) : getDate(data.startDate.getTime() + 86400000);
+        data.startDate = new Date(data.start);
+        data.endDate = data.end ? new Date(data.end) : new Date(data.startDate.getTime() + 86400000);
         if (id) {
-            event.update({
+            db.get('event').update({
                 _id: id
             }, data, function(error, doc) {
                 res.json({
@@ -64,7 +62,7 @@ exports.update = function(db) {
                 });
             });
         } else {
-            event.insert(data, function(error, doc) {
+            db.get('event').insert(data, function(error, doc) {
                 res.json(doc);
             });
         }
@@ -73,10 +71,9 @@ exports.update = function(db) {
 
 exports.deleteEvent = function(db) {
     return function(req, res) {
-        var event = db.get('event');
         var id = req.params.id;
         if (id) {
-            event.remove({
+            db.get('event').remove({
                 _id: id
             }, function(error, data) {
                 res.json({
@@ -90,8 +87,4 @@ exports.deleteEvent = function(db) {
             });
         }
     };
-};
-
-getDate = function(date) {
-    return new Date(date);
 };

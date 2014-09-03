@@ -1,7 +1,7 @@
 $('#calendar').fullCalendar({
     header: {
-        left: '',
-        center: 'title',
+        left: 'title',
+        center: '',
         right: ''
     },
     defaultView: 'agendaDay',

@@ -35,10 +35,6 @@ exports.reportData = function(db) {
 };
 
 var getData = function(db, start, end, users, done) {
-    var change = db.get('change');
-    var user = db.get('user');
-    var team = db.get('team');
-
     var startDate = start ? new Date(moment(start)) : new Date(moment().weekday(0));
     var endDate = end ? new Date(moment(end)) : new Date();
 
@@ -46,7 +42,7 @@ var getData = function(db, start, end, users, done) {
 
     async.parallel({
         changes: function(callback) {
-            change.find({
+            db.get('change').find({
                 date: {
                     '$gte': startDate,
                     '$lt': endDate
@@ -59,7 +55,7 @@ var getData = function(db, start, end, users, done) {
             });
         },
         users: function(callback) {
-            user.find({
+            db.get('user').find({
                 username: {
                     $in: users
                 }
@@ -71,7 +67,7 @@ var getData = function(db, start, end, users, done) {
             });
         },
         teams: function(callback) {
-            team.find({}, function(error, teams) {
+            db.get('team').find({}, function(error, teams) {
                 if (error) {
                     callback(error);
                 }

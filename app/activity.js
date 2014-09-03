@@ -1,9 +1,8 @@
 exports.dashboard = function(db) {
     return function(req, res) {
-        var user = db.get('user');
         var teamId = req.params.teamId;
         if (teamId) {
-            user.find({
+            db.get('user').find({
                 teamId: teamId
             }, {}, function(error, users) {
                 res.render('activity/dashboard', {
@@ -11,21 +10,20 @@ exports.dashboard = function(db) {
                 });
             });
         } else {
-            user.find({}, {}, function(error, users) {
+            db.get('user').find({}, {}, function(error, users) {
                 res.render('activity/dashboard', {
                     users: users
                 });
             });
         }
-    }
+    };
 };
 
 exports.events = function(db) {
     return function(req, res) {
-        var activity = db.get('activity');
         var start = req.query.start;
         var end = req.query.end;
-        activity.find({
+        db.get('activity').find({
             date: {
                 '$gte': new Date(start),
                 '$lt': new Date(end)
@@ -44,15 +42,14 @@ exports.events = function(db) {
             }
             res.json(result);
         });
-    }
+    };
 };
 
 exports.changes = function(db) {
     return function(req, res) {
-        var change = db.get('change');
         var start = req.query.start;
         var end = req.query.end;
-        change.find({
+        db.get('change').find({
             date: {
                 '$gte': new Date(start).getTime(),
                 '$lt': new Date(end).getTime()
@@ -72,5 +69,5 @@ exports.changes = function(db) {
             }
             res.json(result);
         });
-    }
+    };
 };
