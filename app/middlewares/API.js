@@ -197,7 +197,7 @@ exports.parseChangesFromPage = function(username, callback) {
                 var date = new Date($this.find('.article-date > span').attr('title'));
                 var message = $this.find('.article-message').text().replace(/\n/g, '');
                 var jira = jiraPattern.test(message) ? message.replace(jiraPattern, '$1') : '[NON-JIRA]';
-                message = message.repalce(jiraPattern, '$2');
+                message = message.replace(jiraPattern, '$2');
                 var data = {
                     date: date,
                     jira: jira,
