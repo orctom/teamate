@@ -7,12 +7,13 @@ module.exports = function(config, schedule, logger) {
     var change = db.get('change');
     var user = db.get('user');
 
+    schedule.scheduleJob('*/15 * * * *', loadActivities(config, user, activity));
     if (config.scheduler.enabled) {
         schedule.scheduleJob('* * * * *', function() {
             console.log('The answer to life, the universe, and everything! ' + new Date());
         });
 
-        schedule.scheduleJob('*/15 * * * *', loadActivities(config, activity));
+        schedule.scheduleJob('*/15 * * * *', loadActivities(config, user, activity));
 
         // rest api is down
         //schedule.scheduleJob('*/30 * * * *', loadChanges(config, change));
@@ -20,7 +21,7 @@ module.exports = function(config, schedule, logger) {
     }
 };
 
-var loadActivities = function(config, activity) {
+var loadActivities = function(config, user, activity) {
     console.log('============= loading activities ============== ' + new Date());
     var count = 0;
     var lastActivityDate = new Date();
