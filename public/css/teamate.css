@@ -311,11 +311,6 @@ table tbody tr.highlight td {
     width: 1.3em;
     vertical-align: middle;
 }
-#activity-users {
-    top: 100px;
-    position: fixed;
-    width: 12%;
-}
 .fold {
     cursor: pointer;
 }

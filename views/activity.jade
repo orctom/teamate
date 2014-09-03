@@ -5,10 +5,10 @@ block styles
 	link(rel='stylesheet', href='/css/pick-a-color-1.2.3.min.css')
 block content
 	.row
-		.col-lg-2
-			.row
+		.col-sm-3
+			.row(style='margin-top: 20px;')
 				.col-sm-12
-					table#activity-users.table.table-striped.table-bordered.table-hover
+					table.table.table-striped.table-bordered.table-hover
 						tbody
 							tr
 								th Users
@@ -17,7 +17,9 @@ block content
 									tr
 										td
 											a(href="#" onclick="loadActivity('#{user.username}')") #{user.name}
-		.col-lg-10
+			.row
+				.col-sm-12
+		.col-sm-9
 			h1.page-header Activities 
 				i(style='font-size: 0.6em;') Please select user from left table
 			.row.page-title-tools
