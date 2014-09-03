@@ -1,17 +1,17 @@
-exports.dashboard = function(db) {
+exports.activity = function(db) {
     return function(req, res) {
         var teamId = req.params.teamId;
         if (teamId) {
             db.get('user').find({
                 teamId: teamId
             }, {}, function(error, users) {
-                res.render('activity/dashboard', {
+                res.render('activity', {
                     users: users
                 });
             });
         } else {
             db.get('user').find({}, {}, function(error, users) {
-                res.render('activity/dashboard', {
+                res.render('activity', {
                     users: users
                 });
             });

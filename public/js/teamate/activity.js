@@ -3,7 +3,7 @@ $(function() {
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'month,basicWeek,agendaDay'
         },
         selectable: true,
         selectHelper: true,
@@ -50,7 +50,7 @@ $(function() {
     }
 });
 
-renderCategoriesDropdown = function() {
+var renderCategoriesDropdown = function() {
     var categories = $.localStorage('categories');
     if (categories) {
         var $dropdown = $('#event-editor-category');
@@ -61,11 +61,12 @@ renderCategoriesDropdown = function() {
     }
 };
 
-reloadEvents = function() {
+var reloadEvents = function() {
     $('#calendar').fullCalendar('refetchEvents');
 };
 
 var loadActivity = function(user) {
     $('#calendar').fullCalendar('removeEvents');
     $('#calendar').fullCalendar('addEventSource', '/activities/events/' + user);
+    $('.page-header > i').html(user);
 };

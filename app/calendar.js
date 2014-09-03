@@ -1,6 +1,6 @@
-exports.dashboard = function(db) {
+exports.calendar = function(db) {
     return function(req, res) {
-        res.render('calendar/dashboard');
+        res.render('calendar');
     };
 };
 

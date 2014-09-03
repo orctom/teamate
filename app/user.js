@@ -31,7 +31,7 @@ exports.users = function(db) {
                         userData.push(userEntity);
                     }
                 }
-                res.render('user/users', {
+                res.render('users', {
                     teams: teamData,
                     users: userData
                 });

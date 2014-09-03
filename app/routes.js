@@ -13,7 +13,7 @@ var jira = require('./jira');
 module.exports = function(app, passport, db, logger) {
 
     //=====================   home   =======================
-    app.get('/', requireLogin, dashboard.index(db));
+    app.get('/', requireLogin, dashboard.dashboard(db));
 
     //=====================   security   =======================
     app.get('/login', profile.login);
@@ -33,13 +33,13 @@ module.exports = function(app, passport, db, logger) {
     app.get('/task/category/delete/:id', requireLogin, task.deleteCategory(db));
 
     //=====================   calendar   =======================
-    app.get('/events', requireLogin, calendar.dashboard(db));
+    app.get('/events', requireLogin, calendar.calendar(db));
     app.get('/calendar/events', requireLogin, calendar.events(db));
     app.post('/calendar/events', requireLogin, calendar.update(db));
     app.get('/calendar/event/delete/:id', requireLogin, calendar.deleteEvent(db));
 
     //=====================   activity   =======================
-    app.get('/activities/:teamId', requireLogin, activity.dashboard(db));
+    app.get('/activities/:teamId', requireLogin, activity.activity(db));
     app.get('/activities/events/:username', requireLogin, activity.events(db));
     app.get('/activities/changes/:username', requireLogin, activity.changes(db));
 

@@ -1,5 +1,5 @@
-exports.index = function(db) {
+exports.dashboard = function(db) {
     return function(req, res) {
-        res.render('dashboard/index');
+        res.render('dashboard');
     };
 };
