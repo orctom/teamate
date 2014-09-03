@@ -1,0 +1,65 @@
+extends layout/layout
+block content
+	#teamModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='teamModallabel' aria-hidden='true')
+		.modal-dialog
+			.modal-content
+				form#team-form.form(action='' method='POST' role='form')
+					.modal-header
+						button.close(type='button' data-dismiss='modal' aria-hidden='true') &times;
+						h4#teamModallabel.modal-title Add / Edit Team
+					.modal-body
+						.form-group
+							.col-sm-12
+								input#team-form-id.form-control(type='hidden' name='_id' value='')
+								input#team-form-name.form-control(type='text' required name='team' value='' placeholder='Team Name' autofocus)
+					.modal-footer
+						button.btn.btn-default(type='button', data-dismiss='modal') Close
+						button.btn.btn-primary(type='submit') Save
+	.row
+		.col-sm-12
+			h1.page-header Users
+			.col-sm-3
+				table.table.table-striped.table-bordered.table-hover
+					tbody#ungrouped-users.dragdrop
+						tr
+							th User not grouped
+							input#userfilter.form-control(placeholder='type here to filter...')
+						if users
+							each user, i in users
+								tr(id='#{user._id}')
+									td
+										|#{user.name}
+			.col-sm-9
+				#teamContainer
+					if teams
+						each team, i in teams
+							if team.name
+								.panel.panel-default(id='team-#{team._id}')
+									.panel-heading.fold
+										i.fa.fa-users.fa-fw.fold &nbsp;
+										span.title.fold #{team.name}
+										.pull-right
+											.btn-group
+												button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown' type='button')
+													| Actions
+													span.caret
+												ul.dropdown-menu.pull-right(role='dropdown')
+													li
+														a(href='#' data-toggle='modal' data-target='#teamModal' data-id='#{team._id}' data-name='#{team.name}') Edit
+													li
+														a(href='#' data-toggle='modal' data-target='#confirm-delete' data-id='#{team._id}') Delete
+									.panel-body
+										table.table.table-striped.table-bordered.table-hover
+											tbody.dragdrop(id='#{team._id}')
+												tr
+													td
+														b Members
+												if team.users
+													each user, i in team.users
+														tr(id='#{user._id}')
+															td
+																| #{user.name}
+				a.btn.btn-primary(data-toggle='modal', data-target='#teamModal') Add Team
+block scripts
+	script(src='/js/jquery/jquery-ui-1.11.1.min.js')
+	script(src='/js/user.js')
