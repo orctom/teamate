@@ -19,6 +19,9 @@ block content
 											a(href="#" onclick="loadActivity('#{user.username}')") #{user.name}
 			.row
 				.col-sm-12
+					img#commitChartDay
+					img#commitChartHour
+					iframe#commitCalendar(frameBorder='0' width='100%' height='100')
 		.col-sm-9
 			h1.page-header Activities 
 				i(style='font-size: 0.6em;') Please select user from left table

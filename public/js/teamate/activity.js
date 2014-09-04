@@ -65,8 +65,21 @@ var reloadEvents = function() {
     $('#calendar').fullCalendar('refetchEvents');
 };
 
+var previousEventSource;
 var loadActivity = function(user) {
     $('#calendar').fullCalendar('removeEvents');
-    $('#calendar').fullCalendar('addEventSource', '/activities/events/' + user);
+    if (previousEventSource) {
+        $('#calendar').fullCalendar('removeEventSource', previousEventSource);
+    }
+    previousEventSource = '/activities/events/' + user;
+    $('#calendar').fullCalendar('addEventSource', previousEventSource);
+
+    $('#commitChartDay, #commitChartHour, #commitCalendar').hide().on('load', function() {
+        $(this).fadeIn();
+    });
+    $('#commitChartDay').prop('src', 'https://ecomsvn.officedepot.com/fe/commitChartDay.do?w=276&h=70&context=user&imageBackgroundColour=FFFFFF&outputtype=image&username=' + user);
+    $('#commitChartHour').prop('src', 'https://ecomsvn.officedepot.com/fe/commitChartHour.do?w=276&h=70&context=user&imageBackgroundColour=FFFFFF&outputtype=image&username=' + user);
+    $('#commitCalendar').prop('src', 'https://ecomsvn.officedepot.com/fe/commitCalendar.do?outputtype=html&context=user&username=' + user);
+
     $('.page-header > i').html(user);
 };
