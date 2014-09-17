@@ -314,3 +314,7 @@ table tbody tr.highlight td {
 .fold {
     cursor: pointer;
 }
+
+.datepicker {
+    z-index:2000 !important;
+}

@@ -22,9 +22,8 @@ module.exports = function(app, passport, db, logger) {
     app.get('/profile', requireLogin, profile.showProfile);
 
     //=====================   task   =======================
-    app.get('/task', requireLogin, task.list(db));
-    app.get('/task/add', requireLogin, task.add);
-    app.get('/task/edit/:id', requireLogin, task.edit(db));
+    app.get('/task', requireLogin, task.index(db));
+    app.get('/task/list', requireLogin, task.list(db));
     app.post('/task/save', requireLogin, task.save(db));
     app.get('/task/delete/:id', requireLogin, task.delete(db));
 

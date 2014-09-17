@@ -1,10 +1,11 @@
 extends ../layout/layout
 block styles
-	link(rel='stylesheet', href='/css/pick-a-color-1.2.3.min.css')
+	link(rel='stylesheet' href='/css/pick-a-color-1.2.3.min.css')
+	link(rel='stylesheet' href='/css/bootstrap-datepicker.css')
 block content
 	.row
 		.col-lg-12
-			h1.page-header Task List
+			h1.page-header Todo List
 			.col-lg-9
 				.row
 					table.table.table-striped.table-bordered.table-hover
@@ -13,19 +14,33 @@ block content
 								th.col-lg-1 &nbsp;
 								th.col-lg-6 Task
 								th.col-lg-2 Tags
-						tbody
-							if tasks
-								each task, i in tasks
-									tr
-										td
-											a.btn.btn-info.btn-xs(href='task/edit/#{task._id}')
-												i.glyphicon.glyphicon-edit
-											a.btn.btn-warning.btn-xs(href='#' data-href='task/delete/#{task._id}' data-toggle='modal' data-target='#confirm-delete')
-												i.glyphicon.glyphicon-remove
-										td #{task.content}
-										td dummy tags
+						tbody#tasks
 					.btn-group
-						a(href='task/add').btn.btn-default Add
+						a.btn.btn-primary(data-toggle='modal' href='#taskModal') Add Task
+						#taskModal.modal.fade
+							.modal-dialog
+								.modal-content
+									form#task-form.form-horizontal(role='form')
+										.modal-header
+											button.close(type='button' data-dismiss='modal' aria-hidden='true') &times;
+											h4.modal-title Todo Item
+										.modal-body
+											.form-group
+												input.form-control(type='hidden' name='_id' value='' )
+											.form-group
+												label.col-sm-2.control-label(for='content') Content(*):
+												.col-sm-10
+													input.form-control(type='text' required id='content' name='content' value='' autofocus)
+											.form-group
+												label.col-sm-2.control-label(for='dueDate') Date:
+												.col-sm-10
+													input.datepicker.form-control(type='text' id='dueDate' name='dueDate' value='' placeholder='Optional planned date')
+											.form-group
+												label.col-sm-2.control-label(for='tags') Tags:
+												.col-sm-10#tags.btn-group(data-toggle="buttons")
+										.modal-footer
+											button.btn.btn-default(type='button' data-dismiss='modal') Close
+											button.btn.btn-primary(type='submit') Save changes
 			.col-sm-3
 				.panel.panel-default
 					.panel-heading
@@ -39,7 +54,7 @@ block content
 										th Category Name
 										th 
 								tbody#categories
-						form#category-form.form(action='', method='POST', role='form')
+						form#category-form.form(action='' method='POST' role='form')
 							legend
 								fieldset
 									.form-group
@@ -57,4 +72,5 @@ block content
 block scripts
 	script(src='/js/color/tinycolor-0.9.15.min.js')
 	script(src='/js/color/pick-a-color-1.2.3.min.js')
-	script(src='/js/teamate/task.js')
+	script(src='/js/bootstrap/bootstrap-datepicker.js')
+	script(src='/js/task.js')

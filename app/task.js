@@ -1,24 +1,13 @@
-exports.list = function(db) {
+exports.index = function(db) {
     return function(req, res) {
-        db.get('task').find({}, {}, function(error, data) {
-            res.render('task/list', {
-                "tasks": data
-            });
-        });
+        res.render('task/list');
     };
 };
 
-exports.add = function(req, res) {
-    res.render('task/add');
-};
-
-exports.edit = function(db) {
+exports.list = function(db) {
     return function(req, res) {
-        var id = req.params.id;
-        db.get('task').findById(id, function(error, data) {
-            res.render('task/edit', {
-                "task": data
-            });
+        db.get('task').find({}, {}, function(error, data) {
+            res.json(data);
         });
     };
 };
@@ -28,7 +17,8 @@ exports.save = function(db) {
         var id = req.body._id;
         var data = {
             content: req.body.content,
-            tag: req.body.tag
+            date: req.body.date,
+            tags: req.body.tags
         };
         if (id) {
             db.get('task').update({
