@@ -5,4 +5,9 @@ tr
 		a.btn.btn-warning.btn-xs(href='#' data-href='task/delete/#{_id}' data-toggle='modal' data-target='#confirm-delete')
 			i.glyphicon.glyphicon-remove
 	td #{content}
-	td dummy tags
+	td #{date}
+	td
+		each tag, i in tags
+			label.btn.btn-default.btn-xs
+				span.color-box(style="background-color:##{tag.color}")
+				| #{tag.name}

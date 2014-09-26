@@ -111,7 +111,7 @@ var toMap = function(categories) {
     var data = {};
     for (var i = 0; i < categories.length; i++) {
         var category = categories[i];
-        data[category.name] = category;
+        data[category._id] = category;
     }
     return data;
 };

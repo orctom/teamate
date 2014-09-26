@@ -1,33 +1,8 @@
 var categoryTemplate = require("../views/templates/category-item.jade");
 var taskTemplate = require("../views/templates/task-item.jade");
 var tagsTemplate = require("../views/templates/category-tags.jade");
-$(function() {
-    loadTasks();
 
-    $(".pick-a-color").pickAColor({
-        inlineDropdown: true
-    });
-
-    $('#task-form').on('submit', function(event) {
-        event.preventDefault();
-        $.post('/task/save', $(this).serialize(), function(data) {
-            if (data) {
-                loadTasks();
-            }
-        });
-        $(this).find('input').val('');
-        $('#taskModal').modal('hide');
-    });
-
-    $('#category-form').on('submit', function(event) {
-        event.preventDefault();
-        $.post('/task/categories/save', $(this).serialize(), function(data) {
-            if (data) {
-                loadCategories(data, true);
-            }
-        });
-    });
-
+var initCategories = function() {
     var categories = $.localStorage('categories');
     if (categories) {
         loadCategories(categories);
@@ -38,21 +13,60 @@ $(function() {
             }
         });
     }
+};
 
+var initColerPicker = function() {
+    $(".pick-a-color").pickAColor({
+        inlineDropdown: true
+    });
+};
+
+var initDatePicker = function() {
     $('.datepicker').datepicker({
         format: "yyyy-mm-dd",
         startDate: "today"
     });
+};
 
-});
+var setupTaskFormSubmitHandler = function() {
+    $('#task-form').on('submit', function(event) {
+        event.preventDefault();
+        $.post('/task/save', $(this).serialize(), function(data) {
+            if (data) {
+                loadTasks();
+            }
+        });
+        $(this).find('input').val('');
+        $('#taskModal').modal('hide');
+    });
+};
+
+var setupCategoryFormSubmitHandler = function() {
+    $('#category-form').on('submit', function(event) {
+        event.preventDefault();
+        $.post('/task/categories/save', $(this).serialize(), function(data) {
+            if (data) {
+                loadCategories(data, true);
+            }
+        });
+    });
+};
 
 var loadTasks = function() {
     $('#tasks tr').remove();
     $.get('/task/list', function(tasks) {
+        var categories = $.localStorage('categories');
         for (var key in tasks) {
             var task = tasks[key];
-            console.log("============");
-            console.dir(task);
+            var tags = task.tags;
+            if ("object" === typeof tags) {
+                for (var i in tags) {
+                    var tag = tags[i];
+                    tags[i] = categories[tag];
+                }
+            } else {
+                task.tags = [categories[tags]];
+            }
             $('#tasks').append(taskTemplate(task));
         }
     });
@@ -60,7 +74,7 @@ var loadTasks = function() {
 
 var loadCategories = function(categories, persist) {
     if (persist) {
-        $.localStorage('cacategorytegories', categories);
+        $.localStorage('categories', categories);
     }
 
     $('#categories tr').remove();
@@ -70,6 +84,8 @@ var loadCategories = function(categories, persist) {
         $('#categories').append(categoryTemplate(category));
         $('#tags').append(tagsTemplate(category));
     }
+
+    loadTasks();
 };
 
 var editCategory = function(id, name, color) {
@@ -84,3 +100,10 @@ var deleteCategory = function(id) {
         }
     });
 };
+
+
+initCategories();
+initColerPicker();
+initDatePicker();
+setupTaskFormSubmitHandler();
+setupCategoryFormSubmitHandler();
