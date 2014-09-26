@@ -12,11 +12,11 @@ $('#confirm-delete').on('show.bs.modal', function(e) {
     if ($target.data('href')) {
         $modal.find('.danger').attr('href', $target.data('href'));
     } else if ($target.data('onclick')) {
-        $modal.find('.danger').bind('click', function() {
-            $modal.modal('hide');
-        });
         $modal.find('.danger').attr('onclick', $target.data('onclick'));
     }
+    $modal.find('.danger').bind('click', function() {
+        $modal.modal('hide');
+    });
 });
 
 (function($) {

@@ -52,6 +52,24 @@ var setupCategoryFormSubmitHandler = function() {
     });
 };
 
+var setupDeleteHandler = function() {
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        var $target = $(e.relatedTarget);
+        var $modal = $(this);
+        var taskId = $target.data('task-id');
+        var categoryId = $target.data('category-id');
+        if (categoryId) {
+            $modal.find('.danger').on('click', function() {
+                deleteCategory(categoryId)
+            });
+        } else if (taskId) {
+            $modal.find('.danger').on('click', function() {
+                deleteTask(taskId)
+            });
+        }
+    });
+};
+
 var loadTasks = function() {
     $('#tasks tr').remove();
     $.get('/task/list', function(tasks) {
@@ -70,6 +88,11 @@ var loadTasks = function() {
             $('#tasks').append(taskTemplate(task));
         }
     });
+};
+
+var deleteTask = function(id) {
+    $("#task_" + id).remove();
+    $.post('/task/delete/' + id);
 };
 
 var loadCategories = function(categories, persist) {
@@ -101,9 +124,9 @@ var deleteCategory = function(id) {
     });
 };
 
-
 initCategories();
 initColerPicker();
 initDatePicker();
 setupTaskFormSubmitHandler();
 setupCategoryFormSubmitHandler();
+setupDeleteHandler();

@@ -5,5 +5,5 @@ tr
 	td
 		a.btn.btn-info.btn-xs(href="#" onclick="editCategory('#{_id}', '#{name}', '#{color}')")
 			i.glyphicon.glyphicon-edit
-		a.btn.btn-warning.btn-xs(data-target="#confirm-delete" data-toggle="modal" href="#" data-onclick="deleteCategory('#{_id}')")
+		a.btn.btn-warning.btn-xs(data-target="#confirm-delete" data-toggle="modal" href="#" data-category-id='#{_id}')
 			i.glyphicon.glyphicon-remove

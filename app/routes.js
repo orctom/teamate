@@ -25,7 +25,7 @@ module.exports = function(app, passport, db, logger) {
     app.get('/task', requireLogin, task.index(db));
     app.get('/task/list', requireLogin, task.list(db));
     app.post('/task/save', requireLogin, task.save(db));
-    app.get('/task/delete/:id', requireLogin, task.delete(db));
+    app.post('/task/delete/:id', requireLogin, task.delete(db));
 
     app.get('/task/categories', requireLogin, task.categories(db));
     app.post('/task/categories/save', requireLogin, task.saveCategory(db));

@@ -41,10 +41,13 @@ exports.delete = function(db) {
             db.get('task').remove({
                 _id: id
             }, function(error, data) {
-                res.redirect('/task');
+                res.json({
+                    success: true
+                });
             });
         } else {
-            res.redirect('/task', {
+            res.json({
+                success: false,
                 message: 'Invalid request, "_id" expected.'
             });
         }

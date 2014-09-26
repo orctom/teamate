@@ -1,13 +1,14 @@
-tr
+tr(id='task_#{_id}')
 	td
 		a.btn.btn-info.btn-xs(href='task/edit/#{_id}')
 			i.glyphicon.glyphicon-edit
-		a.btn.btn-warning.btn-xs(href='#' data-href='task/delete/#{_id}' data-toggle='modal' data-target='#confirm-delete')
+		a.btn.btn-warning.btn-xs(href='#' data-task-id='#{_id}' data-toggle='modal' data-target='#confirm-delete')
 			i.glyphicon.glyphicon-remove
 	td #{content}
 	td #{date}
 	td
 		each tag, i in tags
-			label.btn.btn-default.btn-xs
-				span.color-box(style="background-color:##{tag.color}")
-				| #{tag.name}
+			if tag
+				label.btn.btn-default.btn-xs
+					span.color-box(style="background-color:##{tag.color}")
+					| #{tag.name}
