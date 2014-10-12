@@ -130,6 +130,12 @@ $(function() {
     }
 
     setupCategoryOnChangeHandler();
+
+    $('#event-editor-form').on('submit', function() {
+        var data = $('#event-editor-form').serializeObject();
+        saveEvent(data);
+        closeEventEditor();
+    });
 });
 
 setupCategoryOnChangeHandler = function() {
@@ -150,10 +156,12 @@ setupCategoryOnChangeHandler = function() {
 renderCategoriesDropdown = function() {
     var categories = $.localStorage('categories');
     if (categories) {
+        console.log("categories==");
+        console.dir(categories);
         var $dropdown = $('#event-editor-category');
-        for (var name in categories) {
-            var color = categories[name].color;
-            $dropdown.append($("<option value='" + name + "' color='" + color + "'>" + name + "</option>"));
+        for (var key in categories) {
+            var category = categories[key];
+            $dropdown.append($("<option value='" + category.name + "' color='" + category.color + "'>" + category.name + "</option>"));
         }
     }
 };
@@ -163,13 +171,6 @@ closeEventEditor = function() {
     $('#event-editor-form').find('input, textarea').val('');
     $('#event-editor').hide();
     $('#event-editor-header').html("");
-};
-
-saveFromEventEditor = function(event) {
-    event.preventDefault();
-    var data = $('#event-editor-form').serializeObject();
-    saveEvent(data);
-    closeEventEditor();
 };
 
 reloadEvents = function() {
