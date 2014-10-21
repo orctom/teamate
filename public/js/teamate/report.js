@@ -18,7 +18,7 @@ var loadJiraInfo = function() {
         jiras += $(this).text() + "+";
     });
     $.getJSON('jiras/' + jiras, null, function(datas) {
-        $('#changes').find('a[href]').each(function() {
+        $('#changes').find('a[jira]').each(function() {
             var jira = $(this).text();
             $('<span>', {
                 html: datas[jira] ? datas[jira].summary : ''
