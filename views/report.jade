@@ -25,11 +25,19 @@ block content
 								if team.users && team.users.length > 0
 									li #{team.name}
 										each user, j in team.users
-											ul #{user.name}
+											ul  #{user.name}
+												| &nbsp;
+												a(title="Changes" href="https://ecomsvn.officedepot.com/user/#{user.username}" target="_blank")
+													li.fa.fa-external-link
+														| 
+												| &nbsp;
+												a(title="Activities" href="https://officedepot.atlassian.net/secure/ViewProfile.jspa?name=#{user.username}")
+													li.fa.fa-external-link-square
+														| 
 												each changes, k in user.jiras
 													li
 														if '[NON-JIRA]' != k
-															a(href='https://officedepot.atlassian.net/browse/#{k}') #{k}
+															a.jira(href='https://officedepot.atlassian.net/browse/#{k}') #{k}
 														else
 															| #{k}
 														each jira, l in changes
