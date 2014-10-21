@@ -2,13 +2,11 @@ var async = require('async');
 var moment = require('moment');
 
 var users = [
-    'suo.lu', 'shengbin.cao', 'huawei.zhu',
-    'bin.yang', 'jingcao.ma',
+    'suo.lu', 'shengbin.cao', 'bin.yang', 'jingcao.ma',
     'jia.yanju', 'patrick.wunier',
-    'haili.lui', 'wei.wang', 'shuoshuo.zhang', 'lei.fang',
-    'lefeng.chen', 'zhao.chen', 'zhongzheng.liu',
-    'fei.xue', 'luilu.jiao', 'wayne.qin',
-    'song.wei', 'weiping.he', 'wenshuai.shi', 'zhiqiang.li',
+    'haili.lui', 'shuoshuo.zhang', 'lei.fang', 'fei.xue',
+    'lefeng.chen', 'zhongzheng.liu', 'huawei.zhu',
+    'luilu.jiao', 'wayne.qin', 'weiping.he', 'wenshuai.shi',
     'bin.wang', 'chen.yang', 'chunnan.ji', 'nianjun.sun',
 ];
 
@@ -102,7 +100,7 @@ var getData = function(db, start, end, users, done) {
 
         for (var i in users) {
             var user = users[i];
-            if (user.teamId) {
+            if (user.teamId && teams[user.teamId]) {
                 teams[user.teamId].users.push(user);
             }
         }
